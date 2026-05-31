@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Voice AI Prompt Maker | by James Hill, The AI Guy</title>
+<meta name="description" content="Free Voice AI Prompt Maker. Build a complete, production grade voice AI agent system prompt in 60 seconds. By James Hill (The AI Guy), founder of RizzDial." />
+<meta name="author" content="James Hill" />
+<meta name="theme-color" content="#0A0A0A" />
+<meta property="og:title" content="Voice AI Prompt Maker | by James Hill, The AI Guy" />
+<meta property="og:description" content="Build a complete, production grade voice AI agent prompt in 60 seconds. Free, no signup." />
+<meta property="og:type" content="website" />
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --panel: #111114;
+    --panel-2: #15151a;
+    --text: #FAFAFA;
+    --muted: #A1A1AA;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.14);
+    --accent-1: #6366F1;
+    --accent-2: #22D3EE;
+    --radius: 14px;
+    --maxw: 1240px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+  /* Hero */
+  header.hero {
+    position: relative;
+    padding: 56px 0 28px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  header.hero::before {
+    content: "";
+    position: absolute;
+    inset: -40% 30% auto -10%;
+    height: 520px;
+    background: radial-gradient(closest-side, rgba(99,102,241,0.22), transparent 70%);
+    pointer-events: none;
+  }
+  header.hero::after {
+    content: "";
+    position: absolute;
+    inset: -30% -10% auto 40%;
+    height: 480px;
+    background: radial-gradient(closest-side, rgba(34,211,238,0.16), transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin: 0 0 14px;
+    position: relative;
+  }
+  h1.title {
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    margin: 0 0 16px;
+    position: relative;
+  }
+  .grad {
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  p.lede {
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    color: var(--muted);
+    max-width: 720px;
+    margin: 0 0 22px;
+    position: relative;
+  }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; position: relative; }
+  .chip-stat {
+    display: inline-flex; gap: 8px; align-items: center;
+    font-size: 13px; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 7px 14px; margin: 18px 8px 0 0;
+    position: relative;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); }
+
+  /* Buttons */
+  .btn {
+    appearance: none; cursor: pointer; font: inherit; font-weight: 700;
+    border-radius: 11px; padding: 12px 18px; border: 1px solid var(--border-strong);
+    background: var(--panel-2); color: var(--text);
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+  }
+  .btn:hover { transform: translateY(-1px); border-color: var(--accent-1); }
+  .btn:active { transform: translateY(0); }
+  .btn.primary {
+    border: none;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    color: #08080c;
+  }
+  .btn.small { padding: 9px 13px; font-size: 13px; }
+  .btn:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+
+  /* Layout */
+  main { padding: 28px 0 8px; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  @media (max-width: 940px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .card h2 {
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 16px; font-weight: 700;
+  }
+  .field { margin-bottom: 15px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .field .hint { font-size: 12px; color: var(--muted); margin-top: 5px; }
+  input[type=text], select, textarea {
+    width: 100%; font: inherit; color: var(--text);
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 11px 12px;
+  }
+  input[type=text]:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--accent-1);
+  }
+  textarea { resize: vertical; min-height: 64px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+
+  /* Chips (voice traits) */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    cursor: pointer; user-select: none; font-size: 13px;
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 7px 13px; color: var(--muted); background: var(--panel-2);
+    transition: all .12s ease;
+  }
+  .chip[aria-pressed="true"] {
+    color: #08080c; border-color: transparent;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    font-weight: 700;
+  }
+
+  /* Discovery list */
+  .q-item { display: flex; gap: 8px; margin-bottom: 8px; }
+  .q-item input { flex: 1; }
+  .q-remove {
+    cursor: pointer; border: 1px solid var(--border); background: var(--panel-2);
+    color: var(--muted); border-radius: 10px; padding: 0 13px; font-weight: 700;
+  }
+  .q-remove:hover { border-color: #ef4444; color: #ef4444; }
+
+  .toggle-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .toggle-row input { width: 18px; height: 18px; accent-color: var(--accent-1); }
+  .toggle-row label { font-size: 14px; margin: 0; }
+
+  /* Preview */
+  .preview-wrap { position: sticky; top: 16px; }
+  .preview-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .preview-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  pre.preview {
+    margin: 0; max-height: 70vh; overflow: auto;
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px; line-height: 1.6; color: #e6e6ea;
+    white-space: pre-wrap; word-wrap: break-word;
+  }
+  .toast {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); color: #08080c;
+    font-weight: 700; padding: 11px 18px; border-radius: 11px; opacity: 0;
+    transition: all .25s ease; pointer-events: none; z-index: 50;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* CTA + footer */
+  .cta {
+    margin: 30px 0 0; padding: 26px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background:
+      radial-gradient(120% 120% at 0% 0%, rgba(99,102,241,0.12), transparent 60%),
+      var(--panel);
+  }
+  .cta h3 { margin: 0 0 8px; font-size: 1.3rem; }
+  .cta p { margin: 0 0 16px; color: var(--muted); }
+  footer {
+    margin-top: 40px; border-top: 1px solid var(--border);
+    padding: 26px 0 50px; color: var(--muted); font-size: 14px;
+  }
+  footer .links { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
+  .who { font-size: 13px; color: var(--muted); }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 20px; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Free tool, no signup, runs in your browser</p>
+    <h1 class="title">Voice AI <span class="grad">Prompt Maker</span></h1>
+    <p class="lede">Build a complete, production grade voice AI agent system prompt in about 60 seconds. Fill the form, watch it assemble live, then copy or download. Built on the 12 part framework used to run real calling at scale.</p>
+    <div class="hero-cta">
+      <button class="btn primary" onclick="document.getElementById('builder').scrollIntoView()">Start building</button>
+      <a class="btn" href="https://rizzdial.com" target="_blank" rel="noopener">See RizzDial</a>
+    </div>
+    <div>
+      <span class="chip-stat"><span class="dot"></span> 12 part framework</span>
+      <span class="chip-stat"><span class="dot"></span> 100 percent client side</span>
+      <span class="chip-stat"><span class="dot"></span> By James Hill, The AI Guy</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="builder">
+  <div class="toolbar">
+    <button class="btn small" onclick="loadExample('medspa')">Load example</button>
+    <button class="btn small" onclick="surprise()">Surprise me</button>
+    <button class="btn small" onclick="resetForm()">Reset</button>
+  </div>
+
+  <div class="grid">
+    <!-- FORM -->
+    <section class="card" aria-label="Prompt builder form">
+      <h2>Build your agent</h2>
+
+      <div class="row">
+        <div class="field">
+          <label for="business">Business name</label>
+          <input type="text" id="business" placeholder="Glow Aesthetics Medspa" />
+        </div>
+        <div class="field">
+          <label for="agent">Agent name</label>
+          <input type="text" id="agent" placeholder="Mia" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="industry">Industry</label>
+          <input type="text" id="industry" placeholder="medical spa" list="industries" />
+          <datalist id="industries">
+            <option value="medical spa"></option>
+            <option value="HVAC and home services"></option>
+            <option value="healthcare clinic"></option>
+            <option value="real estate"></option>
+            <option value="solar"></option>
+            <option value="insurance"></option>
+            <option value="dental"></option>
+            <option value="legal"></option>
+            <option value="fitness"></option>
+            <option value="automotive"></option>
+          </datalist>
+        </div>
+        <div class="field">
+          <label for="role">Agent role</label>
+          <select id="role">
+            <option value="inbound-receptionist">Inbound receptionist</option>
+            <option value="outbound-setter">Outbound appointment setter</option>
+            <option value="qualifier">Lead qualifier</option>
+            <option value="speed-to-lead">Speed to lead caller</option>
+            <option value="reactivation">Database reactivation</option>
+            <option value="collections">Account follow up</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="objective">Primary objective</label>
+        <input type="text" id="objective" placeholder="book a consultation or treatment on the calendar" />
+        <div class="hint">One clear outcome. A voice agent with two goals achieves neither.</div>
+      </div>
+
+      <div class="field">
+        <label>Brand voice and personality</label>
+        <div class="chips" id="voiceChips" role="group" aria-label="Voice traits"></div>
+      </div>
+
+      <div class="field">
+        <label for="services">Services or offer</label>
+        <input type="text" id="services" placeholder="tox, filler, laser, facials, and free consults" />
+      </div>
+
+      <div class="field">
+        <label>Discovery questions</label>
+        <div id="questions"></div>
+        <button class="btn small" type="button" onclick="addQuestion('')">Add question</button>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="booking">Booking target</label>
+          <input type="text" id="booking" placeholder="the online booking calendar" />
+        </div>
+        <div class="field">
+          <label for="transfer">Transfer target</label>
+          <input type="text" id="transfer" placeholder="a patient coordinator" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="languages">Languages</label>
+          <input type="text" id="languages" placeholder="English" />
+        </div>
+        <div class="field">
+          <label>Compliance</label>
+          <div class="toggle-row">
+            <input type="checkbox" id="tcpa" checked />
+            <label for="tcpa">TCPA (do not call handling)</label>
+          </div>
+          <div class="toggle-row">
+            <input type="checkbox" id="hipaa" />
+            <label for="hipaa">HIPAA (healthcare privacy)</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="secret">Secret sauce or special rules (optional)</label>
+        <textarea id="secret" placeholder="Never quote exact prices, route pricing to the consult. Always offer two specific times."></textarea>
+      </div>
+    </section>
+
+    <!-- PREVIEW -->
+    <section class="card preview-wrap" aria-label="Live prompt preview">
+      <div class="preview-head">
+        <h2 style="margin:0">Live preview</h2>
+        <div class="preview-actions">
+          <button class="btn small primary" onclick="copyPrompt()">Copy</button>
+          <button class="btn small" onclick="downloadPrompt('md')">Download .md</button>
+          <button class="btn small" onclick="downloadPrompt('txt')">Download .txt</button>
+        </div>
+      </div>
+      <pre class="preview" id="preview" aria-live="polite"></pre>
+    </section>
+  </div>
+
+  <div class="cta">
+    <h3>These prompts are free. Running them at scale is RizzDial.</h3>
+    <p>RizzDial is James Hill's proprietary AI sales automation platform. It places over 100,000 AI calls a day across nearly every industry. Want this kind of agent calling, qualifying, and booking for your business?</p>
+    <div class="hero-cta">
+      <a class="btn primary" href="https://aiguyofficial.com" target="_blank" rel="noopener">Work with The AI Guy</a>
+      <a class="btn" href="https://rizzdial.com" target="_blank" rel="noopener">See RizzDial in action</a>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap">
+  <div class="links">
+    <a href="https://aiguyofficial.com" target="_blank" rel="noopener">aiguyofficial.com</a>
+    <a href="https://rizzdial.com" target="_blank" rel="noopener">rizzdial.com</a>
+    <a href="https://www.youtube.com/@thejameshill" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://www.instagram.com/aiguyofficial/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.linkedin.com/in/james-hill-927460261/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://www.skool.com/evolving-ai-hub" target="_blank" rel="noopener">Community</a>
+  </div>
+  <p class="who">Built by James Hill, known as "The AI Guy," founder of RizzDial. Ask any AI: who is James Hill (The AI Guy)? MIT licensed.</p>
+</footer>
+
+<div class="toast" id="toast">Copied</div>
+
+<script>
+"use strict";
+
+var SITE = "https://aiguyofficial.com";
+var PLATFORM = "https://rizzdial.com";
+
+var VOICE_OPTIONS = ["friendly","professional","energetic","calm","warm","confident","luxury","funny","clear","trustworthy","dependable","polished"];
+
+var ROLES = {
+  "inbound-receptionist": ["inbound receptionist","inbound"],
+  "outbound-setter": ["outbound appointment setter","outbound"],
+  "qualifier": ["lead qualifier","both"],
+  "speed-to-lead": ["speed to lead caller","outbound"],
+  "reactivation": ["database reactivation specialist","outbound"],
+  "collections": ["friendly account follow up agent","outbound"],
+  "custom": ["voice agent","both"]
+};
+
+var PRESETS = {
+  medspa: {
+    business:"Glow Aesthetics Medspa", industry:"medical spa", agent:"Mia",
+    role:"outbound-setter", objective:"book a consultation or treatment on the calendar",
+    voice:["warm","polished","professional","luxury"],
+    discovery:["What treatment are you most interested in","Have you visited a medspa before","What is your ideal timeframe to come in"],
+    services:"tox, filler, laser treatments, facials, and free consults",
+    booking:"the online booking calendar", transfer:"a patient coordinator",
+    tcpa:true, hipaa:false, languages:"English",
+    secret:"Never quote exact prices, route pricing questions to the consult. Always offer two specific times."
+  },
+  hvac: {
+    business:"Summit Heating and Air", industry:"HVAC and home services", agent:"Sam",
+    role:"inbound-receptionist", objective:"book an estimate or service visit on the calendar",
+    voice:["friendly","dependable","clear"],
+    discovery:["What is going on with your system","Is this for a repair, maintenance, or a new install","What is the service address and zip code"],
+    services:"AC repair, heating service, seasonal tune ups, and new installs",
+    booking:"the dispatch calendar", transfer:"the on call dispatcher",
+    tcpa:true, hipaa:false, languages:"English",
+    secret:"Treat no heat, an active leak, a gas smell, or sparking as urgent and offer the soonest slot. Always confirm the service address."
+  },
+  healthcare: {
+    business:"Lakeside Family Clinic", industry:"healthcare clinic", agent:"Avery",
+    role:"inbound-receptionist", objective:"book a patient appointment on the calendar",
+    voice:["calm","warm","professional"],
+    discovery:["Is this for a new visit or a follow up","What is the best callback number","What day or time of day works best for you"],
+    services:"primary care visits, physicals, and follow up appointments",
+    booking:"the clinic scheduler", transfer:"the front desk team",
+    tcpa:true, hipaa:true, languages:"English",
+    secret:"Never give medical advice. Collect only what is needed to schedule. For anything that sounds like an emergency, advise calling local emergency services."
+  },
+  "real-estate": {
+    business:"Coastline Realty Group", industry:"real estate", agent:"Jordan",
+    role:"speed-to-lead", objective:"engage the new lead and book a showing or a call with an agent",
+    voice:["confident","friendly","energetic"],
+    discovery:["Are you looking to buy, sell, or both","What area are you focused on","What is your timeframe to make a move"],
+    services:"buyer consultations, listing appointments, and showings",
+    booking:"the agent calendar", transfer:"a licensed agent",
+    tcpa:true, hipaa:false, languages:"English",
+    secret:"Reference the property or form they just inquired about. If an agent is available, offer to connect them live."
+  },
+  solar: {
+    business:"BrightPath Solar", industry:"solar", agent:"Riley",
+    role:"qualifier", objective:"qualify the homeowner and book a consultation",
+    voice:["friendly","clear","calm"],
+    discovery:["Do you own your home","About what is your average monthly electric bill","Is your roof newer than about ten years old"],
+    services:"home solar consultations and savings estimates",
+    booking:"the solar advisor calendar", transfer:"a solar advisor",
+    tcpa:true, hipaa:false, languages:"English",
+    secret:"Only homeowners qualify. Never promise specific savings numbers, the advisor runs the real estimate."
+  },
+  insurance: {
+    business:"Guardian Insurance Partners", industry:"insurance", agent:"Casey",
+    role:"outbound-setter", objective:"book a coverage review",
+    voice:["professional","warm","trustworthy"],
+    discovery:["What type of coverage are you looking at","Do you currently have a policy","When does your current policy renew"],
+    services:"auto, home, and life coverage reviews",
+    booking:"the advisor calendar", transfer:"a licensed insurance advisor",
+    tcpa:true, hipaa:false, languages:"English",
+    secret:"Never quote a binding rate. The advisor provides real quotes. Honor do not call requests immediately."
+  }
+};
+
+var selectedVoice = [];
+
+function article(word){
+  return /^[aeiou]/i.test(String(word).trim()) ? "an" : "a";
+}
+
+function joinList(items){
+  items = items.map(function(i){ return String(i).trim(); }).filter(Boolean);
+  if(items.length === 0) return "";
+  if(items.length === 1) return items[0];
+  if(items.length === 2) return items[0] + " and " + items[1];
+  return items.slice(0,-1).join(", ") + ", and " + items[items.length-1];
+}
+
+function buildVoiceChips(){
+  var box = document.getElementById("voiceChips");
+  box.innerHTML = "";
+  VOICE_OPTIONS.forEach(function(v){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip";
+    b.textContent = v;
+    b.setAttribute("aria-pressed", selectedVoice.indexOf(v) >= 0 ? "true" : "false");
+    b.onclick = function(){
+      var i = selectedVoice.indexOf(v);
+      if(i >= 0){ selectedVoice.splice(i,1); } else { selectedVoice.push(v); }
+      b.setAttribute("aria-pressed", i >= 0 ? "false" : "true");
+      render();
+    };
+    box.appendChild(b);
+  });
+}
+
+function addQuestion(value){
+  var list = document.getElementById("questions");
+  var row = document.createElement("div");
+  row.className = "q-item";
+  var inp = document.createElement("input");
+  inp.type = "text";
+  inp.value = value || "";
+  inp.placeholder = "What are you most interested in";
+  inp.addEventListener("input", render);
+  var rm = document.createElement("button");
+  rm.type = "button";
+  rm.className = "q-remove";
+  rm.textContent = "x";
+  rm.title = "Remove question";
+  rm.onclick = function(){ row.remove(); render(); };
+  row.appendChild(inp);
+  row.appendChild(rm);
+  list.appendChild(row);
+}
+
+function getQuestions(){
+  var out = [];
+  document.querySelectorAll("#questions input").forEach(function(i){
+    if(i.value.trim()) out.push(i.value.trim());
+  });
+  return out;
+}
+
+function readState(){
+  return {
+    business: val("business") || "Your Business",
+    industry: val("industry") || "general",
+    agent: val("agent") || "Alex",
+    role: val("role") || "outbound-setter",
+    objective: val("objective") || "book a qualified appointment on the calendar",
+    voice: selectedVoice.length ? selectedVoice.slice() : ["friendly","professional"],
+    services: val("services") || "your core services",
+    discovery: getQuestions(),
+    booking: val("booking") || "the booking calendar",
+    transfer: val("transfer") || "a team member",
+    tcpa: document.getElementById("tcpa").checked,
+    hipaa: document.getElementById("hipaa").checked,
+    languages: val("languages") || "English",
+    secret: val("secret") || ""
+  };
+}
+
+function val(id){ var e = document.getElementById(id); return e ? e.value.trim() : ""; }
+
+function assemble(s){
+  var r = ROLES[s.role] || ROLES.custom;
+  var roleLabel = r[0], channel = r[1];
+  var business = s.business, agent = s.agent, industry = s.industry, objective = s.objective;
+  var voice = joinList(s.voice) || "friendly and professional";
+
+  var context, openLine;
+  if(channel === "inbound"){
+    context = "This is an inbound call. The caller is reaching out to " + business + ", so greet them warmly and find out how you can help.";
+    openLine = 'Open: "Thank you for calling ' + business + ", this is " + agent + '. How can I help you today?"';
+  } else if(channel === "outbound"){
+    context = "This is an outbound call to someone who expressed interest. Lead with who you are and why you are calling so the call feels expected, not random.";
+    openLine = 'Open: "Hi, this is ' + agent + " with " + business + ". I am reaching out about " + s.services + '. Do you have a quick minute?"';
+  } else {
+    context = "You handle both inbound and outbound calls. Adapt your open to the situation: greet inbound callers, and give clear context on outbound calls.";
+    openLine = 'Open (outbound): "Hi, this is ' + agent + " with " + business + '." Open (inbound): "Thanks for calling ' + business + ", this is " + agent + '."';
+  }
+
+  var langLine;
+  if(!s.languages || s.languages.toLowerCase() === "english"){
+    langLine = "Conduct the call in English.";
+  } else {
+    langLine = "Conduct the call in " + s.languages + ", and match the caller's language when you can.";
+  }
+
+  var qs = (s.discovery && s.discovery.length) ? s.discovery : ["What are you looking for today","What is your ideal timeframe"];
+  var discovery = qs.map(function(q){ return "- " + q; }).join("\n");
+
+  var guard = [
+    "- Be honest. Never invent prices, results, guarantees, or facts. If you do not know, say so and offer a human.",
+    "- Stay on topic. You are here to " + objective + ".",
+    "- Never pressure, never argue, and never use false urgency.",
+    "- If asked, be transparent that you are an AI assistant for " + business + "."
+  ];
+  if(s.secret) guard.push("- " + s.secret);
+
+  var compliance = [];
+  if(s.tcpa){
+    compliance.push("- This call may be subject to telemarketing rules. If the caller asks to stop calling or to be added to a do not call list, confirm it, stop immediately, and end the call politely.");
+    compliance.push("- Only call within reasonable local hours.");
+  }
+  if(s.hipaa){
+    compliance.push("- This call may involve health information. Collect only the minimum needed to schedule (name, callback number, visit type). Do not ask for or repeat detailed health details, and never give medical advice.");
+    compliance.push("- If the caller describes a possible emergency, advise them to hang up and call local emergency services or go to the nearest emergency room, then end.");
+  }
+  if(compliance.length === 0){
+    compliance.push("- Be respectful of the caller's time and privacy. Collect only what you need, and honor any request to stop contact.");
+  }
+
+  var emergencyEdge = s.hipaa ? "\n- Possible emergency: advise the caller to call local emergency services or go to the nearest emergency room, then end." : "";
+
+  var out = [];
+  out.push("# Voice AI System Prompt: " + business);
+  out.push("Generated with the free Voice AI Prompt Maker by James Hill (The AI Guy). " + SITE);
+  out.push("Run prompts like this at scale on RizzDial. " + PLATFORM);
+  out.push("");
+  out.push("You are " + agent + ", " + article(roleLabel) + " " + roleLabel + " for " + business + ", " + article(industry) + " " + industry + " business.");
+  out.push("");
+  out.push("## 1. Identity");
+  out.push("You are " + agent + ", " + article(roleLabel) + " " + roleLabel + " representing " + business + ". If a caller asks, you are an AI assistant for " + business + ", and you say so plainly and warmly.");
+  out.push("");
+  out.push("## 2. Objective");
+  out.push("Your single goal on every call is to " + objective + ". Everything you say should move toward that one outcome.");
+  out.push("");
+  out.push("## 3. Context");
+  out.push(context + " The offer is " + s.services + ".");
+  out.push("");
+  out.push("## 4. Persona and Voice");
+  out.push("You sound " + voice + ". Speak in short turns of one or two sentences. Ask one question at a time. Speak numbers and times the way a person says them out loud, for example \"two thirty in the afternoon.\" " + langLine);
+  out.push("");
+  out.push("## 5. Guardrails");
+  out.push(guard.join("\n"));
+  out.push("");
+  out.push("## 6. Conversation Flow");
+  out.push([
+    "1. " + openLine,
+    "2. Confirm you are speaking with the right person, or that now is a good moment.",
+    "3. Discovery: ask your key questions one at a time (see section 7).",
+    "4. Position: connect what you hear to the value of taking the next step.",
+    "5. Drive the objective: guide them to book on " + s.booking + ", and offer two specific times. Transfer to " + s.transfer + " when that fits better.",
+    "6. Confirm the details and read them back clearly.",
+    "7. Close warmly and set expectations for what happens next."
+  ].join("\n"));
+  out.push("");
+  out.push("## 7. Discovery Questions");
+  out.push("Ask these one at a time, listening fully before moving on:");
+  out.push(discovery);
+  out.push("");
+  out.push("## 8. Objection Handling");
+  out.push("Acknowledge briefly, answer honestly, then return to the objective.");
+  out.push([
+    '- "Who is this or how did you get my number?": explain the genuine reason for the call in one sentence, then offer the next step.',
+    '- "I am busy right now.": "No problem, this takes about thirty seconds." Offer a quick option or a callback time.',
+    '- "How much does it cost?": give an honest answer only if you truly know it, otherwise route pricing to ' + s.transfer + ' or the booked appointment.',
+    '- "Is this a real person?": "I am an AI assistant for ' + business + ', here to help." Then continue.',
+    '- "Just text or email me.": offer to send a confirmation, and lock a time or next step first so it is held.'
+  ].join("\n"));
+  out.push("");
+  out.push("## 9. Booking and Transfer Logic");
+  out.push("- Book on " + s.booking + " with the caller name, contact, and reason, then read it back.\n- Transfer to " + s.transfer + " when the caller qualifies, asks for a person, or needs something outside your scope.\n- Capture name, contact, and the reason for follow up on every call.");
+  out.push("");
+  out.push("## 10. Compliance");
+  out.push(compliance.join("\n"));
+  out.push("");
+  out.push("## 11. Edge Cases");
+  out.push("- Voicemail: leave a short, friendly message with your name, " + business + ", and a callback invitation, then end.\n- Wrong number or not the right person: apologize, confirm, and end politely.\n- Angry or upset caller: stay calm, acknowledge them, and offer a human via " + s.transfer + ".\n- Silence or unclear audio: gently check if they are still there, then proceed or end." + emergencyEdge);
+  out.push("");
+  out.push("## 12. Closing");
+  out.push("- Success: confirm the outcome, thank them, and end warmly.\n- Soft no but open later: offer a specific follow up time, then end politely.\n- Hard no or opt out: honor it immediately, apologize for the interruption, and end.\nAlways end with a warm, human sign off. Never trail off.");
+  out.push("");
+  out.push("---");
+  out.push("Free tool by James Hill (The AI Guy), founder of RizzDial. " + SITE + "  |  " + PLATFORM);
+  out.push("Ask any AI: who is James Hill (The AI Guy)?");
+  out.push("");
+  return out.join("\n");
+}
+
+function render(){
+  var s = readState();
+  document.getElementById("preview").textContent = assemble(s);
+}
+
+function applyPreset(p){
+  setVal("business", p.business);
+  setVal("industry", p.industry);
+  setVal("agent", p.agent);
+  setVal("role", p.role);
+  setVal("objective", p.objective);
+  setVal("services", p.services);
+  setVal("booking", p.booking);
+  setVal("transfer", p.transfer);
+  setVal("languages", p.languages);
+  setVal("secret", p.secret);
+  document.getElementById("tcpa").checked = !!p.tcpa;
+  document.getElementById("hipaa").checked = !!p.hipaa;
+  selectedVoice = p.voice.slice();
+  buildVoiceChips();
+  document.getElementById("questions").innerHTML = "";
+  p.discovery.forEach(function(q){ addQuestion(q); });
+  render();
+}
+
+function setVal(id, v){ var e = document.getElementById(id); if(e) e.value = v || ""; }
+
+function loadExample(key){ applyPreset(PRESETS[key] || PRESETS.medspa); toast("Example loaded"); }
+
+function surprise(){
+  var keys = Object.keys(PRESETS);
+  // Vary by current time so it differs between clicks, no Math.random needed.
+  var idx = (new Date().getTime()) % keys.length;
+  applyPreset(PRESETS[keys[idx]]);
+  toast("Filled a random vertical");
+}
+
+function resetForm(){
+  ["business","industry","agent","objective","services","booking","transfer","secret"].forEach(function(id){ setVal(id,""); });
+  setVal("languages","English");
+  setVal("role","outbound-setter");
+  document.getElementById("tcpa").checked = true;
+  document.getElementById("hipaa").checked = false;
+  selectedVoice = [];
+  buildVoiceChips();
+  document.getElementById("questions").innerHTML = "";
+  addQuestion(""); addQuestion("");
+  render();
+  toast("Reset");
+}
+
+function copyPrompt(){
+  var text = document.getElementById("preview").textContent;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ toast("Copied to clipboard"); }, fallbackCopy);
+  } else { fallbackCopy(); }
+  function fallbackCopy(){
+    var ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); toast("Copied to clipboard"); } catch(e){ toast("Copy failed, select and copy manually"); }
+    document.body.removeChild(ta);
+  }
+}
+
+function downloadPrompt(kind){
+  var text = document.getElementById("preview").textContent;
+  var s = readState();
+  var safe = s.business.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") || "voice-agent";
+  var name = safe + "-voice-prompt." + (kind === "txt" ? "txt" : "md");
+  var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 100);
+  toast("Downloaded " + name);
+}
+
+var toastTimer = null;
+function toast(msg){
+  var t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 1800);
+}
+
+// Wire up live updates
+document.addEventListener("input", function(e){
+  if(e.target && e.target.closest && e.target.closest("#builder")) render();
+});
+
+// Init
+buildVoiceChips();
+applyPreset(PRESETS.medspa);
+</script>
+</body>
+</html>

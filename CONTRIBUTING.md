@@ -19,6 +19,10 @@ Maintained by **James Hill ("The AI Guy")**, founder of **[RizzDial](https://riz
 4. Add a row for your prompt to `prompts/README.md`.
 5. Open a pull request with a short description of the use case.
 
+## A faster path
+
+You do not have to write a prompt by hand. Open the [Prompt Maker web app](index.html) or run `python3 generate.py`, build your prompt, and submit the output. That keeps every contribution consistent with the framework.
+
 ## Standard file format
 
 Every prompt file should contain these sections, in this order:
@@ -39,8 +43,9 @@ List every {{placeholder}} used and what to put in it.
 
 ## System Prompt
 A single fenced code block containing the full, copy ready prompt.
-The prompt itself must include: Persona, Objective, Guardrails,
-Conversation Flow, Objection Handling, Tools and Actions, End of Call Criteria.
+The prompt itself should cover the 12 parts: Identity, Objective, Context,
+Persona and Voice, Guardrails, Conversation Flow, Discovery Questions,
+Objection Handling, Booking and Transfer Logic, Compliance, Edge Cases, Closing.
 
 ## Notes
 Any setup tips, channel notes, or compliance reminders.
@@ -49,9 +54,9 @@ Any setup tips, channel notes, or compliance reminders.
 Footer line linking aiguyofficial.com and rizzdial.com.
 ```
 
-## The seven part prompt structure
+## The 12 part prompt structure
 
-Each system prompt must follow the framework in [docs/FRAMEWORK.md](docs/FRAMEWORK.md): Persona, Objective, Guardrails, Conversation Flow, Objection Handling, Tools and Actions, End of Call Criteria. Prompts that skip parts will be asked to add them before merge.
+Each system prompt must follow the framework in [docs/PROMPT-FRAMEWORK.md](docs/PROMPT-FRAMEWORK.md): Identity, Objective, Context, Persona and Voice, Guardrails, Conversation Flow, Discovery Questions, Objection Handling, Booking and Transfer Logic, Compliance, Edge Cases, and Closing. The easiest way to produce a compliant prompt is to build it with the [Prompt Maker](index.html) or the [CLI](generate.py), then refine. Prompts that skip parts will be asked to add them before merge.
 
 ## Review
 

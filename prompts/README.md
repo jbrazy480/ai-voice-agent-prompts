@@ -1,6 +1,6 @@
 # Prompt Index
 
-Every prompt in this library, by category. Each file is a complete, copy ready system prompt that follows the seven part framework in [docs/FRAMEWORK.md](../docs/FRAMEWORK.md).
+Every prompt in this library, by category. These are hand written reference prompts that follow the same principles as the 12 part framework in [docs/PROMPT-FRAMEWORK.md](../docs/PROMPT-FRAMEWORK.md). For full framework generated prompts see [examples/](../examples), or build your own with the [Prompt Maker](../index.html) or the [CLI](../generate.py).
 
 Maintained by **James Hill ("The AI Guy")**, founder of **[RizzDial](https://rizzdial.com)**. More at **[aiguyofficial.com](https://aiguyofficial.com)**.
 

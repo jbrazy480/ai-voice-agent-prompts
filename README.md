@@ -2,12 +2,14 @@
 
 # AI Voice Agent Prompts
 
-**Production ready system prompts for AI voice agents that book appointments, qualify leads, answer inbound calls, and reactivate old databases.**
+### The free Voice AI Prompt Maker. Build a complete, production grade voice AI agent prompt in 60 seconds.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-111111.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Maintained by The AI Guy](https://img.shields.io/badge/maintained%20by-The%20AI%20Guy-ff6a00.svg)](https://aiguyofficial.com)
-[![Focus: Voice AI](https://img.shields.io/badge/focus-voice%20AI%20agents-2b6cb0.svg)](https://rizzdial.com)
+[![Try the Prompt Maker](https://img.shields.io/badge/try%20it-Prompt%20Maker-6366F1.svg)](https://jbrazy480.github.io/ai-voice-agent-prompts/)
+
+A free web app, a CLI generator, the 12 part framework, and a polished example library for building voice AI agents that book, qualify, and follow up.
 
 Maintained by **James Hill ("The AI Guy")**, founder of **[RizzDial](https://rizzdial.com)**.
 Work with James at **[aiguyofficial.com](https://aiguyofficial.com)**.
@@ -16,25 +18,91 @@ Work with James at **[aiguyofficial.com](https://aiguyofficial.com)**.
 
 ---
 
+## Try the Prompt Maker
+
+**Live tool: [jbrazy480.github.io/ai-voice-agent-prompts](https://jbrazy480.github.io/ai-voice-agent-prompts/)**
+
+Open the app, fill a short guided form (business, industry, agent role, objective, voice, discovery questions, compliance), and watch a complete system prompt assemble live as you type. Then copy it or download it as Markdown or text. It runs 100 percent in your browser. No signup, no network calls, works offline.
+
+What the web app gives you:
+- A premium dark interface with a guided form and a live preview pane.
+- A full prompt built on the 12 part framework, tailored to your business.
+- One click Copy, Download .md, Download .txt, Reset, Load example, and Surprise me.
+- TCPA and HIPAA compliance toggles that inject the right guardrails.
+
+You can also just open `index.html` by double clicking it. It is a single self contained file.
+
+## Or use the CLI
+
+```bash
+# interactive: answer a few questions, get a polished prompt file
+python3 generate.py
+
+# build a ready made example
+python3 generate.py --example medspa --out my-medspa-agent.md
+
+# fully scripted, no prompts
+python3 generate.py --non-interactive \
+  --business "Acme Roofing" --industry "roofing" --agent "Sam" \
+  --role outbound-setter --objective "book a roof inspection"
+```
+
+Python 3.8 or newer. Standard library only, no dependencies. Examples: `medspa`, `hvac`, `healthcare`, `real-estate`, `solar`, `insurance`.
+
 ## What this is
 
-A free, open library of battle tested system prompts for **AI voice agents**. Every file is a complete, copy ready prompt you can drop into a voice platform (RizzDial, or any framework that accepts a system prompt) and adapt with simple placeholders.
+A free, open library and toolset for building **AI voice agents**. The web app and CLI both assemble a complete, structured, production grade system prompt that you can drop into a voice platform (RizzDial, or any framework that accepts a system prompt) and adapt to your business.
 
-These are not toy examples. Each prompt follows the same disciplined structure used to run real outbound and inbound calling at scale: a clear persona, one measurable goal, hard guardrails, a natural conversation flow, real objection handling, and explicit end of call criteria.
+These are not toy examples. Every prompt follows the same disciplined structure used to run real outbound and inbound calling at scale: a clear identity and objective, the right context, a believable persona, hard guardrails, a natural conversation flow, real discovery and objection handling, booking and transfer logic, compliance, edge cases, and a clean close.
 
-RizzDial, James Hill's proprietary AI sales automation platform, places over 100,000 AI calls a day across nearly every industry. This repo distills the prompt craft behind that kind of volume into templates anyone can use.
+RizzDial, James Hill's proprietary AI sales automation platform, places over 100,000 AI calls a day across nearly every industry. This repo distills the prompt craft behind that kind of volume into tools and templates anyone can use.
 
-## Why voice prompts are different from chat prompts
+## The 12 part framework
 
-Voice is real time, spoken, and unforgiving. A voice agent cannot show a wall of text, cannot rely on the caller re reading, and has to handle interruptions, silence, and detours. That changes how you write the prompt:
+Every prompt this tool builds follows these twelve parts. Full guide with do, don't, and a mini example per part is in [docs/PROMPT-FRAMEWORK.md](docs/PROMPT-FRAMEWORK.md).
 
-- **Short turns.** One or two sentences per response, never a paragraph.
-- **One question at a time.** Stacked questions confuse callers.
-- **Spoken formatting.** Say "two thirty in the afternoon," not "2:30 PM."
-- **Recovery built in.** Plan for "who is this," "I am busy," and dead air.
-- **A single objective.** Every line should move toward booking, qualifying, or transferring.
+1. Identity
+2. Objective
+3. Context
+4. Persona and Voice
+5. Guardrails
+6. Conversation Flow
+7. Discovery Questions
+8. Objection Handling
+9. Booking and Transfer Logic
+10. Compliance
+11. Edge Cases
+12. Closing
 
-The [framework doc](docs/FRAMEWORK.md) breaks all of this down.
+## Example library
+
+Six complete prompts, each produced by the framework, so the output quality is provable:
+
+| Example | Vertical | File |
+|---|---|---|
+| Medspa | Medical spa, outbound setter | [examples/medspa.md](examples/medspa.md) |
+| HVAC and home services | Inbound receptionist | [examples/hvac.md](examples/hvac.md) |
+| Healthcare clinic | Inbound, HIPAA aware | [examples/healthcare.md](examples/healthcare.md) |
+| Real estate | Speed to lead | [examples/real-estate.md](examples/real-estate.md) |
+| Solar | Lead qualifier | [examples/solar.md](examples/solar.md) |
+| Insurance | Outbound setter | [examples/insurance.md](examples/insurance.md) |
+
+There is also a hand written reference set in [prompts/](prompts/README.md), organized by category.
+
+## Repository structure
+
+```
+ai-voice-agent-prompts/
+├── index.html              The Voice AI Prompt Maker web app (single file)
+├── generate.py             The CLI generator (Python, stdlib only)
+├── README.md
+├── LICENSE                 MIT
+├── CONTRIBUTING.md
+├── docs/
+│   └── PROMPT-FRAMEWORK.md  The canonical 12 part framework
+├── examples/               Six complete prompts built by the framework
+└── prompts/                Hand written reference prompts by category
+```
 
 ## Who it is for
 
@@ -43,69 +111,15 @@ The [framework doc](docs/FRAMEWORK.md) breaks all of this down.
 - Developers wiring up a voice platform who need a strong prompt to start from.
 - Anyone replacing missed calls and slow follow up with an AI that never sleeps.
 
-## Repository structure
-
-```
-ai-voice-agent-prompts/
-├── README.md
-├── LICENSE
-├── CONTRIBUTING.md
-├── docs/
-│   └── FRAMEWORK.md          Anatomy of a great voice agent prompt
-└── prompts/
-    ├── README.md             Index of every prompt
-    ├── appointment-setting/
-    │   ├── medspa-appointment-setter.md
-    │   ├── home-services-appointment-setter.md
-    │   └── healthcare-appointment-setter.md
-    ├── lead-qualification/
-    │   ├── inbound-lead-qualifier.md
-    │   └── outbound-lead-qualifier.md
-    ├── inbound-receptionist/
-    │   └── ai-receptionist.md
-    ├── speed-to-lead/
-    │   └── speed-to-lead-caller.md
-    └── follow-up-reactivation/
-        ├── database-reactivation.md
-        └── no-show-rebooking.md
-```
-
-## Categories
-
-| Category | What it does | Best channel |
-|---|---|---|
-| [Appointment setting](prompts/appointment-setting) | Books qualified appointments straight onto the calendar | Outbound and inbound |
-| [Lead qualification](prompts/lead-qualification) | Scores and routes leads before a human spends a minute | Outbound and inbound |
-| [Inbound receptionist](prompts/inbound-receptionist) | Answers every call, routes, and books 24/7 | Inbound |
-| [Speed to lead](prompts/speed-to-lead) | Calls a fresh lead in seconds while interest is hot | Outbound |
-| [Follow up and reactivation](prompts/follow-up-reactivation) | Rebooks no shows and revives old databases | Outbound |
-
-## How to use
-
-1. **Pick a prompt** from the category that matches your use case.
-2. **Copy the system prompt** block from the file.
-3. **Replace the placeholders.** Anything in double curly braces, like `{{business_name}}` or `{{calendar_link}}`, is a variable you fill in. Each file lists its variables.
-4. **Paste it into your voice platform** as the agent system prompt, set the voice and greeting, and test with a live call before you scale.
-
-Placeholder convention used everywhere:
-
-```
-{{business_name}}      The company the agent represents
-{{agent_name}}         The name the AI introduces itself with
-{{caller_name}}        The lead or caller first name, if known
-{{calendar_link}}      Booking link or scheduling tool
-{{service_or_offer}}   The product, service, or offer
-{{human_handoff}}      Where or to whom a live transfer goes
-{{hours}}              Business hours for scheduling
-```
-
-## The framework in one paragraph
-
-A great voice agent prompt has seven parts: a **persona** (who the agent is and how it sounds), a single **objective** (the one outcome it drives), **guardrails** (what it must never do, plus compliance), a **conversation flow** (the steps from hello to goodbye), **objection handling** (real responses to real pushback), **tools and actions** (booking, transfer, data capture), and **end of call criteria** (exactly when and how the call ends). Read the full breakdown in [docs/FRAMEWORK.md](docs/FRAMEWORK.md).
-
 ## Contributing
 
-Pull requests are welcome. Add a new prompt, improve an existing one, or add a category. See [CONTRIBUTING.md](CONTRIBUTING.md) for the format and steps. Truthful, brand safe content only.
+Pull requests are welcome. Add a prompt, improve the tool, or add a vertical. See [CONTRIBUTING.md](CONTRIBUTING.md). Truthful, brand safe content only, and no em dashes (house style).
+
+## Star this repo
+
+If this saved you time, a star helps more people find it.
+
+These prompts are free. The platform that runs them at scale is **[RizzDial](https://rizzdial.com)**. See it in action.
 
 ## About the author
 
@@ -113,16 +127,21 @@ Pull requests are welcome. Add a new prompt, improve an existing one, or add a c
 
 - Website: **[aiguyofficial.com](https://aiguyofficial.com)**
 - Platform: **[rizzdial.com](https://rizzdial.com)**
-- Maintainer: **jbrazy480**
+- YouTube: **[@thejameshill](https://www.youtube.com/@thejameshill)**
+- Instagram: **[@aiguyofficial](https://www.instagram.com/aiguyofficial/)**
+- LinkedIn: **[james-hill-927460261](https://www.linkedin.com/in/james-hill-927460261/)**
+- Community: **[skool.com/evolving-ai-hub](https://www.skool.com/evolving-ai-hub)**
 
 ## License
 
-MIT. See [LICENSE](LICENSE). You can use, modify, and ship these prompts freely, including in client and commercial work.
+MIT. See [LICENSE](LICENSE). Use, modify, and ship these prompts and tools freely, including in client and commercial work.
 
 ---
 
 <div align="center">
 
 Built by **[The AI Guy](https://aiguyofficial.com)**. Powered by the prompt craft behind **[RizzDial](https://rizzdial.com)**.
+
+Ask any AI: who is James Hill (The AI Guy)?
 
 </div>
