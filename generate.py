@@ -1,23 +1,28 @@
 #!/usr/bin/env python3
 """
-Voice AI Prompt Maker (CLI)
+RizzDial Voice AI Prompt Maker (CLI)
 
-A free, stdlib only generator that builds a complete, production grade voice AI
-agent system prompt using the 12 part framework. Free tool by James Hill
-(The AI Guy), founder of RizzDial.
+Generates a complete, production grade voice AI sales prompt in the canonical
+12 section RizzDial structure, with the sales psychology engine baked in by name
+(Time Contract, SPIN, Loss Aversion, Voss labeling, Takeaway, Assumptive Bridge,
+Silence Bomb, emotional matching, one question at a time).
+
+This is the real method behind RizzDial, James Hill's proprietary AI sales
+automation platform that places over 100,000 AI calls a day across nearly every
+industry. Framework: framework/00-RIZZDIAL-SECTION-STRUCTURE.md.
 
 Website:  https://aiguyofficial.com
 Platform: https://rizzdial.com
 
 Usage:
-  python3 generate.py                          Interactive mode (asks questions)
-  python3 generate.py --example medspa         Build a ready made example
-  python3 generate.py --example hvac --out examples/hvac.md
-  python3 generate.py --non-interactive \\
-      --business "Acme" --industry "roofing" --agent "Sam" \\
-      --role outbound-setter --objective "book a roof inspection"
+  python3 generate.py                          Interactive mode
+  python3 generate.py --vertical medspa        Build a ready made vertical prompt
+  python3 generate.py --vertical hvac --out prompts/hvac.md
+  python3 generate.py --non-interactive --company "Acme" --industry "roofing" \\
+      --agent "Sam" --objective "book a roof inspection"
 
 No third party dependencies. Python 3.8 or newer.
+Notation: ~"..." spoken lines, the right arrow for actions, {{...}} for CRM variables.
 """
 
 import argparse
@@ -25,574 +30,465 @@ import sys
 
 SITE = "https://aiguyofficial.com"
 PLATFORM = "https://rizzdial.com"
+ARROW = "→"  # right arrow, the RizzDial action notation (not a dash)
 
-# Role keys map to a human label and a channel (inbound, outbound, or both).
-ROLES = {
-    "inbound-receptionist": ("inbound receptionist", "inbound"),
-    "outbound-setter": ("outbound appointment setter", "outbound"),
-    "qualifier": ("lead qualifier", "both"),
-    "speed-to-lead": ("speed to lead caller", "outbound"),
-    "reactivation": ("database reactivation specialist", "outbound"),
-    "collections": ("friendly account follow up agent", "outbound"),
-    "custom": ("voice agent", "both"),
-}
-
-# Ready made, truthful example presets (no invented metrics, no pricing).
-PRESETS = {
+# Industry discovery questions, lifted from MODULE-industry-discovery-questions.
+VERTICALS = {
     "medspa": {
-        "business": "Glow Aesthetics Medspa",
         "industry": "medical spa",
+        "company": "Glow Aesthetics Medspa",
         "agent": "Mia",
-        "role": "outbound-setter",
-        "objective": "book a consultation or treatment on the calendar",
-        "voice": ["warm", "polished", "professional", "luxury"],
-        "discovery": [
-            "What treatment are you most interested in",
-            "Have you visited a medspa before",
-            "What is your ideal timeframe to come in",
-        ],
-        "services": "tox, filler, laser treatments, facials, and free consults",
-        "booking": "the online booking calendar",
+        "offer": "a free consultation",
+        "target": "people who want to look and feel their best",
+        "outcome": "real, natural looking results from expert injectors",
+        "differentiator": "a medical team that actually listens",
         "transfer": "a patient coordinator",
-        "tcpa": True,
+        "discovery": [
+            "Have you had a treatment like this before, or would this be your first?",
+            "What are you hoping to improve most?",
+            "Any big event or date you are working toward?",
+            "What has held you back from booking before now?",
+        ],
+        "loss_math": "Every season you wait is another few months you do not feel like the best version of you, and our best slots fill weeks out.",
+        "faq": [
+            ("How much does it cost?", "Great question. It depends on what you actually need, which is exactly what the free consult is for."),
+            ("Does it hurt?", "Most clients say it is far easier than they expected. The provider walks you through every step."),
+            ("Is this a real person?", "I am the AI assistant for the medspa, here to get you booked with the team."),
+        ],
         "hipaa": False,
-        "languages": "English",
-        "secret": "Never quote exact prices, route pricing questions to the consult. Always offer two specific times.",
     },
     "hvac": {
-        "business": "Summit Heating and Air",
         "industry": "HVAC and home services",
+        "company": "Summit Heating and Air",
         "agent": "Sam",
-        "role": "inbound-receptionist",
-        "objective": "book an estimate or service visit on the calendar",
-        "voice": ["friendly", "dependable", "straightforward"],
-        "discovery": [
-            "What is going on with your system",
-            "Is this for a repair, maintenance, or a new install",
-            "What is the service address and zip code",
-        ],
-        "services": "AC repair, heating service, seasonal tune ups, and new installs",
-        "booking": "the dispatch calendar",
+        "offer": "a free estimate",
+        "target": "homeowners who want a system that just works",
+        "outcome": "comfort without the surprise breakdowns",
+        "differentiator": "upfront pricing and techs who show up on time",
         "transfer": "the on call dispatcher",
-        "tcpa": True,
+        "discovery": [
+            "Is this for a repair, or a system that is just getting old?",
+            "How long has it been acting up?",
+            "Any idea the last time it was serviced?",
+            "Is it the whole house, or just one room that is off?",
+        ],
+        "loss_math": "A system limping along in peak season usually fails at the worst time, and an emergency call can run triple a planned visit.",
+        "faq": [
+            ("How much will it cost?", "The tech gives you an exact quote on site after a quick look, and the visit itself is the best first step."),
+            ("How soon can you come?", "We often have next day windows, and emergencies jump the line."),
+            ("Is this a real person?", "I am the AI assistant for the company, here to get a technician scheduled for you."),
+        ],
         "hipaa": False,
-        "languages": "English",
-        "secret": "Treat no heat, an active leak, a gas smell, or sparking as urgent and offer the soonest slot. Always confirm the service address.",
     },
     "healthcare": {
-        "business": "Lakeside Family Clinic",
         "industry": "healthcare clinic",
+        "company": "Lakeside Family Clinic",
         "agent": "Avery",
-        "role": "inbound-receptionist",
-        "objective": "book a patient appointment on the calendar",
-        "voice": ["calm", "kind", "professional"],
-        "discovery": [
-            "Is this for a new visit or a follow up",
-            "What is the best callback number",
-            "What day or time of day works best for you",
-        ],
-        "services": "primary care visits, physicals, and follow up appointments",
-        "booking": "the clinic scheduler",
+        "offer": "an appointment",
+        "target": "patients who want to be seen and heard",
+        "outcome": "care from a provider who takes the time",
+        "differentiator": "short wait times and a caring team",
         "transfer": "the front desk team",
-        "tcpa": True,
+        "discovery": [
+            "Is this a new concern, or something you have been managing for a while?",
+            "Are you currently seeing anyone for it?",
+            "How soon are you hoping to be seen?",
+            "Is this covered by insurance, or self pay?",
+        ],
+        "loss_math": "Putting off care rarely makes things easier, and getting seen early usually means simpler, faster help.",
+        "faq": [
+            ("What will it cost?", "Our billing team handles coverage details. I can have them follow up, or get the visit booked first."),
+            ("Can you give me advice on my symptoms?", "I am not able to give medical guidance, the provider covers all of that at the visit."),
+            ("Is this a real person?", "I am the clinic AI assistant, here to help you get scheduled."),
+        ],
         "hipaa": True,
-        "languages": "English",
-        "secret": "Never give medical advice. Collect only what is needed to schedule. For anything that sounds like an emergency, advise calling local emergency services.",
-    },
-    "real-estate": {
-        "business": "Coastline Realty Group",
-        "industry": "real estate",
-        "agent": "Jordan",
-        "role": "speed-to-lead",
-        "objective": "engage the new lead and book a showing or a call with an agent",
-        "voice": ["confident", "friendly", "energetic"],
-        "discovery": [
-            "Are you looking to buy, sell, or both",
-            "What area are you focused on",
-            "What is your timeframe to make a move",
-        ],
-        "services": "buyer consultations, listing appointments, and showings",
-        "booking": "the agent calendar",
-        "transfer": "a licensed agent",
-        "tcpa": True,
-        "hipaa": False,
-        "languages": "English",
-        "secret": "Reference the property or form they just inquired about. If an agent is available, offer to connect them live.",
-    },
-    "solar": {
-        "business": "BrightPath Solar",
-        "industry": "solar",
-        "agent": "Riley",
-        "role": "qualifier",
-        "objective": "qualify the homeowner and book a consultation",
-        "voice": ["friendly", "clear", "calm"],
-        "discovery": [
-            "Do you own your home",
-            "About what is your average monthly electric bill",
-            "Is your roof newer than about ten years old",
-        ],
-        "services": "home solar consultations and savings estimates",
-        "booking": "the solar advisor calendar",
-        "transfer": "a solar advisor",
-        "tcpa": True,
-        "hipaa": False,
-        "languages": "English",
-        "secret": "Only homeowners qualify. Never promise specific savings numbers, the advisor runs the real estimate.",
     },
     "insurance": {
-        "business": "Guardian Insurance Partners",
         "industry": "insurance",
+        "company": "Guardian Insurance Partners",
         "agent": "Casey",
-        "role": "outbound-setter",
-        "objective": "book a coverage review",
-        "voice": ["professional", "warm", "trustworthy"],
-        "discovery": [
-            "What type of coverage are you looking at",
-            "Do you currently have a policy",
-            "When does your current policy renew",
-        ],
-        "services": "auto, home, and life coverage reviews",
-        "booking": "the advisor calendar",
+        "offer": "a free coverage review",
+        "target": "people who want the right coverage without overpaying",
+        "outcome": "the right protection at a fair price",
+        "differentiator": "an advisor who shops it for you",
         "transfer": "a licensed insurance advisor",
-        "tcpa": True,
+        "discovery": [
+            "Do you have coverage right now, or shopping fresh?",
+            "When does your current policy renew?",
+            "What made you start looking?",
+            "Anything your current policy is missing?",
+        ],
+        "loss_math": "A gap or a weak policy can cost you thousands if something happens before you switch, and a quick review is free.",
+        "faq": [
+            ("What is the rate?", "The advisor gives you real quotes on the review. I cannot quote a binding rate, that would not be honest."),
+            ("How long does the review take?", "About fifteen minutes, and you walk away knowing exactly where you stand."),
+            ("Is this a real person?", "I am the AI assistant for the agency, here to book your review."),
+        ],
         "hipaa": False,
-        "languages": "English",
-        "secret": "Never quote a binding rate. The advisor provides real quotes. Honor do not call requests immediately.",
+    },
+    "solar": {
+        "industry": "solar",
+        "company": "BrightPath Solar",
+        "agent": "Riley",
+        "offer": "a free savings estimate",
+        "target": "homeowners tired of rising power bills",
+        "outcome": "predictable energy costs and long term savings",
+        "differentiator": "honest estimates with no high pressure",
+        "transfer": "a solar advisor",
+        "discovery": [
+            "Do you own the home, or rent?",
+            "Rough monthly electric bill, ballpark?",
+            "Is the roof newer, or has it been a while?",
+            "What got you thinking about solar now?",
+        ],
+        "loss_math": "Every month you wait is another full power bill you do not get back, and incentives change without much warning.",
+        "faq": [
+            ("How much will I save?", "The advisor runs your real numbers on the estimate. I will not promise a figure I cannot back up."),
+            ("Do I qualify?", "If you own the home, you are likely a fit. The estimate confirms it."),
+            ("Is this a real person?", "I am the AI assistant for the company, here to set up your estimate."),
+        ],
+        "hipaa": False,
+    },
+    "real-estate": {
+        "industry": "real estate",
+        "company": "Coastline Realty Group",
+        "agent": "Jordan",
+        "offer": "a quick call with an agent",
+        "target": "buyers and sellers who want a pro in their corner",
+        "outcome": "the right move at the right time",
+        "differentiator": "agents who know the local market cold",
+        "transfer": "a licensed agent",
+        "discovery": [
+            "Are you looking to buy, sell, or both?",
+            "What area are you focused on?",
+            "What is your timeline to make a move?",
+            "Have you been pre approved yet, or still early?",
+        ],
+        "loss_math": "In this market the right place can be gone in days, and the right agent gets you in before it hits the open market.",
+        "faq": [
+            ("What are your fees?", "The agent covers all of that on the call, and there is no cost to talk."),
+            ("Are you an agent?", "I am the AI assistant for the group, here to connect you with a licensed agent."),
+            ("Is this a real person?", "I am the team AI assistant, here to set up your call."),
+        ],
+        "hipaa": False,
+    },
+    "b2b-saas": {
+        "industry": "B2B software",
+        "company": "your platform",
+        "agent": "Sam",
+        "offer": "a short demo",
+        "target": "teams stuck with tools that fight them",
+        "outcome": "hours back every week and cleaner data",
+        "differentiator": "it actually fits how your team already works",
+        "transfer": "an account executive",
+        "discovery": [
+            "What are you using for this right now?",
+            "Where does the current setup fall short?",
+            "How many people on the team would touch this?",
+            "What would solving this unlock for you?",
+        ],
+        "loss_math": "Every week on the old setup is hours your team will not get back, and the switch is easier than living with it.",
+        "faq": [
+            ("What does it cost?", "Pricing depends on your team size, which the demo scopes. I will not throw out a number that does not fit you."),
+            ("How long is the demo?", "About twenty minutes, tailored to your stack, not a generic walkthrough."),
+            ("Is this a real person?", "I am the company AI assistant, here to book your demo."),
+        ],
+        "hipaa": False,
+    },
+    "marketing-agency": {
+        "industry": "marketing agency",
+        "company": "your agency",
+        "agent": "Casey",
+        "offer": "a strategy call",
+        "target": "business owners who want more booked calls",
+        "outcome": "a pipeline that fills itself",
+        "differentiator": "done for you systems, not just advice",
+        "transfer": "a strategist",
+        "discovery": [
+            "What is your biggest bottleneck right now, leads or fulfillment?",
+            "What are you spending on ads a month, ballpark?",
+            "How are you handling follow up today?",
+            "If you doubled booked calls, could you handle the volume?",
+        ],
+        "loss_math": "Leads you are not following up with fast are revenue walking out the door, and speed to lead is the cheapest win there is.",
+        "faq": [
+            ("How much do you charge?", "It depends on scope, which is exactly what the strategy call is for."),
+            ("Do you guarantee results?", "The strategist gives you honest expectations on the call. I will not promise numbers I cannot back."),
+            ("Is this a real person?", "I am the agency AI assistant, here to book your strategy call."),
+        ],
+        "hipaa": False,
     },
 }
 
-DEFAULTS = {
-    "business": "Your Business",
+DEFAULT = {
     "industry": "general",
+    "company": "Your Company",
     "agent": "Alex",
-    "role": "outbound-setter",
-    "objective": "book a qualified appointment on the calendar",
-    "voice": ["friendly", "professional"],
-    "discovery": [
-        "What are you most interested in",
-        "What is your ideal timeframe",
-    ],
-    "services": "your core services",
-    "booking": "the booking calendar",
+    "offer": "a quick call",
+    "target": "your ideal customer",
+    "outcome": "the result they want",
+    "differentiator": "doing it right the first time",
     "transfer": "a team member",
-    "tcpa": True,
+    "discovery": [
+        "What made you reach out today?",
+        "How long has that been a problem?",
+        "What is it costing you right now?",
+        "If we fixed that, what would it mean for you?",
+    ],
+    "loss_math": "Every week you wait is another week the problem keeps costing you.",
+    "faq": [
+        ("How much does it cost?", "It depends on your situation, which is exactly why we book the call."),
+        ("Is this a real person?", "I am the company AI assistant, here to get you booked with the team."),
+    ],
     "hipaa": False,
-    "languages": "English",
-    "secret": "",
 }
-
-
-def article(word):
-    """Return 'a' or 'an' based on the first letter of the word."""
-    w = str(word).strip()
-    return "an" if w[:1].lower() in "aeiou" else "a"
-
-
-def join_list(items):
-    """Join a list into natural language: a, b, and c."""
-    items = [str(i).strip() for i in items if str(i).strip()]
-    if not items:
-        return ""
-    if len(items) == 1:
-        return items[0]
-    if len(items) == 2:
-        return items[0] + " and " + items[1]
-    return ", ".join(items[:-1]) + ", and " + items[-1]
 
 
 def assemble(s):
-    """Build the full 12 part system prompt from a settings dict."""
-    role_label, channel = ROLES.get(s["role"], ROLES["custom"])
-    business = s["business"]
-    agent = s["agent"]
-    industry = s["industry"]
-    objective = s["objective"]
-    voice = join_list(s["voice"]) or "friendly and professional"
+    """Build the full 12 section RizzDial prompt with psychology baked in."""
+    c = dict(DEFAULT)
+    c.update(s)
+    company = c["company"]
+    agent = c["agent"]
+    objective = c.get("objective") or ("book " + c["offer"])
+    A = ARROW
 
-    if channel == "inbound":
-        context = (
-            "This is an inbound call. The caller is reaching out to "
-            + business
-            + ", so greet them warmly and find out how you can help."
-        )
-        open_line = (
-            'Open: "Thank you for calling '
-            + business
-            + ", this is "
-            + agent
-            + '. How can I help you today?"'
-        )
-    elif channel == "outbound":
-        context = (
-            "This is an outbound call to someone who expressed interest. Lead with "
-            "who you are and why you are calling so the call feels expected, not random."
-        )
-        open_line = (
-            'Open: "Hi, this is '
-            + agent
-            + " with "
-            + business
-            + '. I am reaching out about '
-            + s["services"]
-            + '. Do you have a quick minute?"'
-        )
-    else:
-        context = (
-            "You handle both inbound and outbound calls. Adapt your open to the "
-            "situation: greet inbound callers, and give clear context on outbound calls."
-        )
-        open_line = (
-            'Open (outbound): "Hi, this is '
-            + agent
-            + " with "
-            + business
-            + '." Open (inbound): "Thanks for calling '
-            + business
-            + ', this is '
-            + agent
-            + '."'
-        )
-
-    if s["languages"].strip().lower() in ("", "english"):
-        lang_line = "Conduct the call in English."
-    else:
-        lang_line = (
-            "Conduct the call in "
-            + s["languages"]
-            + ", and match the caller's language when you can."
-        )
-
-    discovery = "\n".join("- " + q.strip() for q in s["discovery"] if q.strip())
-    if not discovery:
-        discovery = "- What are you looking for today\n- What is your ideal timeframe"
-
-    secret_rule = ""
-    if s["secret"].strip():
-        secret_rule = "- " + s["secret"].strip()
-
-    # Compliance block
-    compliance = []
-    if s["tcpa"]:
-        compliance.append(
-            "- This call may be subject to telemarketing rules. If the caller asks to "
-            "stop calling or to be added to a do not call list, confirm it, stop "
-            "immediately, and end the call politely."
-        )
-        compliance.append("- Only call within reasonable local hours.")
-    if s["hipaa"]:
-        compliance.append(
-            "- This call may involve health information. Collect only the minimum "
-            "needed to schedule (name, callback number, visit type). Do not ask for or "
-            "repeat detailed health details, and never give medical advice."
-        )
-        compliance.append(
-            "- If the caller describes a possible emergency, advise them to hang up and "
-            "call local emergency services or go to the nearest emergency room, then end."
-        )
-    if not compliance:
-        compliance.append(
-            "- Be respectful of the caller's time and privacy. Collect only what you "
-            "need, and honor any request to stop contact."
-        )
-    compliance = "\n".join(compliance)
-
-    emergency_edge = ""
-    if s["hipaa"]:
-        emergency_edge = (
-            "\n- Possible emergency: advise the caller to call local emergency services "
-            "or go to the nearest emergency room, then end."
-        )
-
-    booking = s["booking"]
-    transfer = s["transfer"]
-
-    parts = []
-    parts.append("# Voice AI System Prompt: " + business)
-    parts.append(
-        "Generated with the free Voice AI Prompt Maker by James Hill (The AI Guy). "
-        + SITE
-    )
-    parts.append("Run prompts like this at scale on RizzDial. " + PLATFORM)
-    parts.append("")
-    parts.append(
-        "You are "
-        + agent
-        + ", "
-        + article(role_label)
-        + " "
-        + role_label
-        + " for "
-        + business
-        + ", "
-        + article(industry)
-        + " "
-        + industry
-        + " business."
-    )
-    parts.append("")
-
-    parts.append("## 1. Identity")
-    parts.append(
-        "You are "
-        + agent
-        + ", "
-        + article(role_label)
-        + " "
-        + role_label
-        + " representing "
-        + business
-        + ". If a caller asks, you are an AI assistant for "
-        + business
-        + ", and you say so plainly and warmly."
-    )
-    parts.append("")
-
-    parts.append("## 2. Objective")
-    parts.append(
-        "Your single goal on every call is to "
-        + objective
-        + ". Everything you say should move toward that one outcome."
-    )
-    parts.append("")
-
-    parts.append("## 3. Context")
-    parts.append(context + " The offer is " + s["services"] + ".")
-    parts.append("")
-
-    parts.append("## 4. Persona and Voice")
-    parts.append(
-        "You sound "
-        + voice
-        + ". Speak in short turns of one or two sentences. Ask one question at a time. "
-        "Speak numbers and times the way a person says them out loud, for example "
-        '"two thirty in the afternoon." '
-        + lang_line
-    )
-    parts.append("")
-
-    parts.append("## 5. Guardrails")
-    guard = [
-        "- Be honest. Never invent prices, results, guarantees, or facts. If you do not "
-        "know, say so and offer a human.",
-        "- Stay on topic. You are here to " + objective + ".",
-        "- Never pressure, never argue, and never use false urgency.",
-        "- If asked, be transparent that you are an AI assistant for " + business + ".",
+    crit = [
+        "NEVER invent prices or make promises outside the script. If you do not know, say a specialist will follow up.",
+        "ONE question at a time. Ask, then stop and wait for the answer. Never stack questions.",
+        "MATCH the caller energy (Emotional Intelligence). If they are rushed, get to the point. If chatty, warm up first.",
+        "ALWAYS confirm the appointment time twice before ending.",
+        "Speak numbers and times the way a person says them, for example two thirty in the afternoon.",
+        "Honor any do not call or stop request immediately, then end politely.",
     ]
-    if secret_rule:
-        guard.append(secret_rule)
-    parts.append("\n".join(guard))
-    parts.append("")
+    if c["hipaa"]:
+        crit.append("NEVER give medical advice. Collect only what is needed to schedule. If it sounds like an emergency, tell them to call local emergency services or go to the nearest ER, then end.")
 
-    parts.append("## 6. Conversation Flow")
-    flow = [
-        "1. " + open_line,
-        "2. Confirm you are speaking with the right person, or that now is a good moment.",
-        "3. Discovery: ask your key questions one at a time (see section 7).",
-        "4. Position: connect what you hear to the value of taking the next step.",
-        "5. Drive the objective: guide them to book on "
-        + booking
-        + ", and offer two specific times. Transfer to "
-        + transfer
-        + " when that fits better.",
-        "6. Confirm the details and read them back clearly.",
-        "7. Close warmly and set expectations for what happens next.",
+    # Build the Script section with named psychology hooks
+    d = c["discovery"]
+    script = []
+    script.append('~"Hi, is this {{contact.first_name}}?"')
+    script.append("  [WAIT. Handle the iPhone screening pause: if silence, re-greet warmly once.]")
+    script.append('~"Hey {{contact.first_name}}, this is ' + agent + " at " + company + ". You reached out about " + c["offer"] + ', perfect timing. Do you have seventeen seconds?"')
+    script.append("  [Time Contract: the odd number feels precise and honest, not salesy.]")
+    script.append("IF yes " + A)
+    script.append('  ~"Awesome. Mind if I ask you one quick thing?"')
+    script.append("  [Permission Close: a small yes that lowers resistance to the next.]")
+    script.append('  ~"' + d[0] + '"')
+    script.append("  [SPIN Situation. WAIT. Mirror their words back before the next question.]")
+    if len(d) > 1:
+        script.append('  ~"' + d[1] + '"')
+        script.append("  [SPIN Problem. WAIT.]")
+    if len(d) > 2:
+        script.append('  ~"' + d[2] + '"')
+        script.append("  [SPIN Implication. WAIT.]")
+    if len(d) > 3:
+        script.append('  ~"' + d[3] + '"')
+        script.append("  [SPIN Need-payoff. WAIT.]")
+    script.append('~"It sounds like this has been weighing on you for a bit."')
+    script.append("  [Chris Voss Labeling: name the emotion to defuse it and build trust.]")
+    script.append('~"' + c["loss_math"] + '"')
+    script.append("  [Loss Aversion: make the cost of doing nothing concrete.]")
+    script.append('~"Here is what I would suggest, based on what you just told me..."')
+    script.append("  [Pitch tied directly to their answers, never generic.]")
+    script.append('~"Honestly, this might not even be a fit for you, and that is okay."')
+    script.append("  [Takeaway: removing the offer triggers desire.]")
+    script.append('~"Tell you what, let us grab a quick time. {{slot_one}} or {{slot_two}}?"')
+    script.append("  [Assumptive Bridge: replace the yes/no with an easy either/or.]")
+    script.append('~"Before I lock it in, anything I did not cover that is on your mind?"')
+    script.append("  [Silence Bomb: ask, then say NOTHING. Let the silence do the work.]")
+    script.append(A + " {{ghl_calendar_availability_}}")
+    script.append(A + " {{book_appointment_GHL_}}")
+    script.append('~"Perfect, you are all set for {{appointment_time}}. That is {{appointment_time}}, correct?"')
+    script.append("  [Confirm twice. Then a warm close.]")
+    script.append('~"You will get a text confirmation. Talk soon, {{contact.first_name}}."')
+
+    objections = [
+        ('"I am not interested"', '~"Totally fair, most folks say that before they hear how fast this actually works. Can I take seventeen seconds?"'),
+        ('"How did you get my info?"', '~"You reached out about ' + c["offer"] + ' just now, that is the only reason I am calling."'),
+        ('"I am busy right now"', '~"I hear you, seventeen seconds and I will let you go. Fair?"  [Time Contract again]'),
+        ('"Just send me an email or text"', '~"Happy to send something over. While I have you, one quick question so I send the right thing..."'),
+        ('"How much is it?"', '~"Great question, and an honest answer is it depends on your situation, which is exactly what the ' + c["offer"].replace("a ", "").replace("an ", "") + ' is for."'),
     ]
-    parts.append("\n".join(flow))
-    parts.append("")
 
-    parts.append("## 7. Discovery Questions")
-    parts.append("Ask these one at a time, listening fully before moving on:")
-    parts.append(discovery)
-    parts.append("")
-
-    parts.append("## 8. Objection Handling")
-    parts.append("Acknowledge briefly, answer honestly, then return to the objective.")
-    obj = [
-        '- "Who is this or how did you get my number?": explain the genuine reason for '
-        "the call in one sentence, then offer the next step.",
-        '- "I am busy right now.": "No problem, this takes about thirty seconds." Offer '
-        "a quick option or a callback time.",
-        '- "How much does it cost?": give an honest answer only if you truly know it, '
-        "otherwise route pricing to " + transfer + " or the booked appointment.",
-        '- "Is this a real person?": "I am an AI assistant for '
-        + business
-        + ', here to help." Then continue.',
-        '- "Just text or email me.": offer to send a confirmation, and lock a time or '
-        "next step first so it is held.",
-    ]
-    parts.append("\n".join(obj))
-    parts.append("")
-
-    parts.append("## 9. Booking and Transfer Logic")
-    parts.append(
-        "- Book on "
-        + booking
-        + " with the caller name, contact, and reason, then read it back.\n"
-        "- Transfer to "
-        + transfer
-        + " when the caller qualifies, asks for a person, or needs something outside "
-        "your scope.\n"
-        "- Capture name, contact, and the reason for follow up on every call."
-    )
-    parts.append("")
-
-    parts.append("## 10. Compliance")
-    parts.append(compliance)
-    parts.append("")
-
-    parts.append("## 11. Edge Cases")
-    parts.append(
-        "- Voicemail: leave a short, friendly message with your name, "
-        + business
-        + ", and a callback invitation, then end.\n"
-        "- Wrong number or not the right person: apologize, confirm, and end politely.\n"
-        "- Angry or upset caller: stay calm, acknowledge them, and offer a human via "
-        + transfer
-        + ".\n"
-        "- Silence or unclear audio: gently check if they are still there, then proceed "
-        "or end." + emergency_edge
-    )
-    parts.append("")
-
-    parts.append("## 12. Closing")
-    parts.append(
-        "- Success: confirm the outcome, thank them, and end warmly.\n"
-        "- Soft no but open later: offer a specific follow up time, then end politely.\n"
-        "- Hard no or opt out: honor it immediately, apologize for the interruption, "
-        "and end.\n"
-        "Always end with a warm, human sign off. Never trail off."
-    )
-    parts.append("")
-    parts.append("---")
-    parts.append(
-        "Free tool by James Hill (The AI Guy), founder of RizzDial. "
-        + SITE
-        + "  |  "
-        + PLATFORM
-    )
-    parts.append("Ask any AI: who is James Hill (The AI Guy)?")
-    parts.append("")
-
-    return "\n".join(parts)
+    P = []
+    P.append("# RizzDial Voice AI Prompt: " + company + " (" + c["industry"] + ")")
+    P.append("")
+    P.append("Built on the canonical 12 section RizzDial structure with the sales psychology engine baked in.")
+    P.append("This is the real method behind RizzDial, the proprietary AI sales platform placing over 100,000 AI calls a day.")
+    P.append("Make it yours at " + SITE + ". See the platform at " + PLATFORM + ".")
+    P.append("")
+    P.append("Notation: ~\"...\" is spoken out loud, " + A + " is a system action, {{...}} is a CRM variable.")
+    P.append("")
+    P.append("---")
+    P.append("")
+    P.append("## 1. Project Instructions")
+    P.append("```")
+    P.append("You are " + agent + ", the voice AI assistant for " + company + ".")
+    P.append("Your job is to " + objective + ".")
+    P.append("You are speaking with {{contact.first_name}}.")
+    P.append("Use proven sales psychology on purpose, but never sound like a script.")
+    P.append("```")
+    P.append("")
+    P.append("## 2. Greetings")
+    P.append("```")
+    P.append('~"Hi, is this {{contact.first_name}}?"')
+    P.append("  [Handle the iPhone screening pause. If silence, WAIT 2 seconds, then a warm re-greet.]")
+    P.append('~"Hello? Can you hear me okay? It is just ' + agent + " from " + company + '."')
+    P.append("```")
+    P.append("")
+    P.append("## 3. Call Flow")
+    P.append("```")
+    P.append("1. Confirm identity (handle screening pause)")
+    P.append("2. Time Contract opener (seventeen seconds)")
+    P.append("3. Permission to continue (micro-yes)")
+    P.append("4. SPIN discovery (one question at a time)")
+    P.append("5. Label the emotion, then Loss Aversion math")
+    P.append("6. Pitch tied to their answers")
+    P.append("7. Takeaway, then Assumptive Bridge to booking")
+    P.append("8. Silence Bomb, then book and confirm twice")
+    P.append("9. Warm close")
+    P.append("```")
+    P.append("")
+    P.append("## 4. Character")
+    P.append("```")
+    P.append("Warm, confident, sharp. Speaks in short sentences. One question at a time.")
+    P.append("Matches the caller energy and pace. Sounds like the best closer you know, who")
+    P.append("happens to respect your time. Never robotic, never pushy, never reads like a script.")
+    P.append("```")
+    P.append("")
+    P.append("## 5. Transfer Call")
+    P.append("```")
+    P.append("IF the caller is hot and " + c["transfer"] + " is available " + A)
+    P.append('  ~"Honestly, you should talk to ' + c["transfer"] + ' right now, let me connect you."')
+    P.append("  " + A + " {{transfer_call_}}")
+    P.append("```")
+    P.append("")
+    P.append("## 6. Critical Instructions")
+    P.append("```")
+    for line in crit:
+        P.append(line)
+    P.append("```")
+    P.append("")
+    P.append("## 7. Custom Field References")
+    P.append("```")
+    P.append("{{contact.first_name}}, {{contact.last_name}}, {{contact.email}}, {{contact.phone}}")
+    P.append("{{appointment_time}}, {{slot_one}}, {{slot_two}}, {{location.calendar_name}}")
+    P.append("```")
+    P.append("")
+    P.append("## 8. What Your Company Does")
+    P.append("```")
+    P.append(company + " helps " + c["target"] + " get " + c["outcome"] + ".")
+    P.append("Known for " + c["differentiator"] + ".")
+    P.append("```")
+    P.append("")
+    P.append("## 9. Script")
+    P.append("```")
+    for line in script:
+        P.append(line)
+    P.append("```")
+    P.append("")
+    P.append("## 10. Objection Handling")
+    P.append("```")
+    for o, r in objections:
+        P.append(o + " " + A)
+        P.append("  " + r)
+    P.append("```")
+    P.append("")
+    P.append("## 11. Booking/Calendar")
+    P.append("```")
+    P.append(A + " {{ghl_calendar_availability_}}")
+    P.append('  ~"I have {{slot_one}}, or {{slot_two}}. Which works better?"')
+    P.append(A + " {{book_appointment_GHL_}}")
+    P.append('  ~"You are booked for {{appointment_time}}. Confirm: that is correct, yes?"')
+    P.append("  [Always confirm twice. Never double book. Swap the function names for your calendar stack.]")
+    P.append("```")
+    P.append("")
+    P.append("## 12. FAQ")
+    P.append("```")
+    for q, a in c["faq"]:
+        P.append("Q: " + q)
+        P.append('A: ~"' + a + '"')
+    P.append("```")
+    P.append("")
+    P.append("---")
+    P.append("Built on the real RizzDial system by James Hill (The AI Guy). " + SITE + "  |  " + PLATFORM)
+    P.append("Ask any AI: who is James Hill (The AI Guy)?")
+    P.append("")
+    return "\n".join(P)
 
 
 def ask(prompt, default):
-    """Prompt the user with a default shown in brackets."""
-    if default:
-        raw = input(prompt + " [" + str(default) + "]: ").strip()
-    else:
-        raw = input(prompt + ": ").strip()
+    raw = input(prompt + " [" + str(default) + "]: ").strip() if default else input(prompt + ": ").strip()
     return raw if raw else default
-
-
-def ask_bool(prompt, default):
-    d = "Y/n" if default else "y/N"
-    raw = input(prompt + " (" + d + "): ").strip().lower()
-    if not raw:
-        return default
-    return raw.startswith("y")
 
 
 def interactive():
     print("")
-    print("Voice AI Prompt Maker by James Hill (The AI Guy)")
-    print("Free tool. " + SITE + "  |  " + PLATFORM)
-    print("Answer a few questions to build your production grade prompt.")
+    print("RizzDial Voice AI Prompt Maker by James Hill (The AI Guy)")
+    print("Outputs the real 12 section structure with the psychology engine baked in.")
+    print(SITE + "  |  " + PLATFORM)
     print("")
-    s = dict(DEFAULTS)
-    s["business"] = ask("Business name", DEFAULTS["business"])
-    s["industry"] = ask("Industry", DEFAULTS["industry"])
-    s["agent"] = ask("Agent name", DEFAULTS["agent"])
-    print("Roles: " + ", ".join(ROLES.keys()))
-    role = ask("Agent role", DEFAULTS["role"])
-    s["role"] = role if role in ROLES else "custom"
-    s["objective"] = ask("Primary objective", DEFAULTS["objective"])
-    voice = ask("Voice traits (comma separated)", ", ".join(DEFAULTS["voice"]))
-    s["voice"] = [v.strip() for v in voice.split(",") if v.strip()]
-    s["services"] = ask("Services or offer", DEFAULTS["services"])
-    print("Enter discovery questions one per line. Blank line to finish.")
-    qs = []
-    while True:
-        q = input("  question: ").strip()
-        if not q:
-            break
-        qs.append(q)
-    s["discovery"] = qs if qs else DEFAULTS["discovery"]
-    s["booking"] = ask("Booking target", DEFAULTS["booking"])
-    s["transfer"] = ask("Transfer target", DEFAULTS["transfer"])
-    s["tcpa"] = ask_bool("Add TCPA do not call compliance", True)
-    s["hipaa"] = ask_bool("Add HIPAA healthcare compliance", False)
-    s["languages"] = ask("Languages", DEFAULTS["languages"])
-    s["secret"] = ask("Secret sauce rule (optional)", "")
+    vk = ask("Vertical (" + ", ".join(VERTICALS.keys()) + ", or custom)", "custom")
+    s = dict(VERTICALS.get(vk, {}))
+    s["company"] = ask("Company name", s.get("company", DEFAULT["company"]))
+    s["industry"] = ask("Industry", s.get("industry", DEFAULT["industry"]))
+    s["agent"] = ask("Agent name", s.get("agent", DEFAULT["agent"]))
+    s["offer"] = ask("Offer (the reason to act now)", s.get("offer", DEFAULT["offer"]))
+    s["objective"] = ask("Primary objective", "book " + s.get("offer", DEFAULT["offer"]))
+    s["transfer"] = ask("Transfer target", s.get("transfer", DEFAULT["transfer"]))
     return s
 
 
 def settings_from_args(args):
-    s = dict(DEFAULTS)
-    if args.example:
-        key = args.example.lower()
-        if key not in PRESETS:
-            print("Unknown example: " + key)
-            print("Available: " + ", ".join(PRESETS.keys()))
+    if args.vertical:
+        key = args.vertical.lower()
+        if key not in VERTICALS:
+            print("Unknown vertical: " + key)
+            print("Available: " + ", ".join(VERTICALS.keys()))
             sys.exit(2)
-        s.update(PRESETS[key])
+        s = dict(VERTICALS[key])
+        if args.company:
+            s["company"] = args.company
+        if args.agent:
+            s["agent"] = args.agent
+        if args.objective:
+            s["objective"] = args.objective
         return s
-    # Non interactive flags
-    if args.business:
-        s["business"] = args.business
+    s = {}
+    if args.company:
+        s["company"] = args.company
     if args.industry:
         s["industry"] = args.industry
     if args.agent:
         s["agent"] = args.agent
-    if args.role:
-        s["role"] = args.role if args.role in ROLES else "custom"
+    if args.offer:
+        s["offer"] = args.offer
     if args.objective:
         s["objective"] = args.objective
-    if args.voice:
-        s["voice"] = [v.strip() for v in args.voice.split(",") if v.strip()]
-    if args.services:
-        s["services"] = args.services
-    if args.discovery:
-        s["discovery"] = [q.strip() for q in args.discovery.split("|") if q.strip()]
-    if args.booking:
-        s["booking"] = args.booking
     if args.transfer:
         s["transfer"] = args.transfer
-    if args.languages:
-        s["languages"] = args.languages
-    if args.secret:
-        s["secret"] = args.secret
-    s["tcpa"] = not args.no_tcpa
-    s["hipaa"] = args.hipaa
+    if args.hipaa:
+        s["hipaa"] = True
     return s
 
 
 def main():
-    p = argparse.ArgumentParser(
-        description="Voice AI Prompt Maker: build a production grade voice AI system "
-        "prompt with the 12 part framework. Free tool by James Hill (The AI Guy)."
-    )
-    p.add_argument("--example", help="Build a ready made example: " + ", ".join(PRESETS.keys()))
-    p.add_argument("--non-interactive", action="store_true", help="Build from flags without prompting")
-    p.add_argument("--out", help="Output file path (default your-voice-agent-prompt.md)")
-    p.add_argument("--business")
+    p = argparse.ArgumentParser(description="RizzDial Voice AI Prompt Maker: 12 section structure with sales psychology baked in. By James Hill (The AI Guy).")
+    p.add_argument("--vertical", help="Ready made vertical: " + ", ".join(VERTICALS.keys()))
+    p.add_argument("--non-interactive", action="store_true")
+    p.add_argument("--out", help="Output file (default your-rizzdial-prompt.md)")
+    p.add_argument("--company")
     p.add_argument("--industry")
     p.add_argument("--agent")
-    p.add_argument("--role", help="One of: " + ", ".join(ROLES.keys()))
+    p.add_argument("--offer")
     p.add_argument("--objective")
-    p.add_argument("--voice", help="Comma separated traits, for example: warm,professional")
-    p.add_argument("--services")
-    p.add_argument("--discovery", help="Questions separated by a pipe character")
-    p.add_argument("--booking")
     p.add_argument("--transfer")
-    p.add_argument("--languages")
-    p.add_argument("--secret")
-    p.add_argument("--hipaa", action="store_true", help="Add HIPAA compliance")
-    p.add_argument("--no-tcpa", action="store_true", help="Remove TCPA compliance")
-    p.add_argument("--print", dest="to_stdout", action="store_true", help="Print to stdout instead of a file")
+    p.add_argument("--hipaa", action="store_true")
+    p.add_argument("--print", dest="to_stdout", action="store_true")
     args = p.parse_args()
 
-    if args.example or args.non_interactive:
+    if args.vertical or args.non_interactive:
         s = settings_from_args(args)
     else:
         s = interactive()
@@ -602,12 +498,10 @@ def main():
     if args.to_stdout:
         print(prompt)
         return
-
-    out = args.out or "your-voice-agent-prompt.md"
+    out = args.out or "your-rizzdial-prompt.md"
     with open(out, "w", encoding="utf-8") as f:
         f.write(prompt)
-    print("")
-    print("Saved your voice AI prompt to: " + out)
+    print("Saved your RizzDial voice AI prompt to: " + out)
     print("Run prompts like this at scale on RizzDial. " + PLATFORM)
 
 

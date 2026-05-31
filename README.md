@@ -2,124 +2,121 @@
 
 # AI Voice Agent Prompts
 
-### The free Voice AI Prompt Maker. Build a complete, production grade voice AI agent prompt in 60 seconds.
+### The real RizzDial voice AI sales prompt system. Build a complete, 12 section, psychology loaded prompt in 60 seconds.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-111111.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Maintained by The AI Guy](https://img.shields.io/badge/maintained%20by-The%20AI%20Guy-ff6a00.svg)](https://aiguyofficial.com)
 [![Try the Prompt Maker](https://img.shields.io/badge/try%20it-Prompt%20Maker-6366F1.svg)](https://jbrazy480.github.io/ai-voice-agent-prompts/)
 
-A free web app, a CLI generator, the 12 part framework, and a polished example library for building voice AI agents that book, qualify, and follow up.
+The web app, the CLI, the canonical 12 section framework, the sales psychology engine, the real numbered templates, and a vertical prompt library. This is the actual method behind **[RizzDial](https://rizzdial.com)**, the proprietary AI sales automation platform placing **over 100,000 AI calls a day** across nearly every industry.
 
-Maintained by **James Hill ("The AI Guy")**, founder of **[RizzDial](https://rizzdial.com)**.
+Built and maintained by **James Hill ("The AI Guy")**, founder of RizzDial.
 Work with James at **[aiguyofficial.com](https://aiguyofficial.com)**.
 
 </div>
 
 ---
 
+## Why this is different
+
+Most voice AI prompt collections are generic. This one is the real production system. Every prompt follows the exact **12 section RizzDial structure** that runs at scale, and every one has a **named sales psychology engine** baked into the script: Time Contract, Permission Close, SPIN, Loss Aversion, Chris Voss labeling, the Takeaway, the Assumptive Bridge, the Silence Bomb, emotional matching, and one question at a time. These are conversion weapons, not templates.
+
 ## Try the Prompt Maker
 
 **Live tool: [jbrazy480.github.io/ai-voice-agent-prompts](https://jbrazy480.github.io/ai-voice-agent-prompts/)**
 
-Open the app, fill a short guided form (business, industry, agent role, objective, voice, discovery questions, compliance), and watch a complete system prompt assemble live as you type. Then copy it or download it as Markdown or text. It runs 100 percent in your browser. No signup, no network calls, works offline.
-
-What the web app gives you:
-- A premium dark interface with a guided form and a live preview pane.
-- A full prompt built on the 12 part framework, tailored to your business.
-- One click Copy, Download .md, Download .txt, Reset, Load example, and Surprise me.
-- TCPA and HIPAA compliance toggles that inject the right guardrails.
-
-You can also just open `index.html` by double clicking it. It is a single self contained file.
+Pick a vertical, adjust a few fields, and watch a complete 12 section prompt assemble live with the psychology hooks injected at the right moments. Copy or download it. Runs 100 percent in your browser, no signup. You can also open `index.html` directly.
 
 ## Or use the CLI
 
 ```bash
-# interactive: answer a few questions, get a polished prompt file
+# interactive
 python3 generate.py
 
-# build a ready made example
-python3 generate.py --example medspa --out my-medspa-agent.md
+# build a ready made vertical prompt
+python3 generate.py --vertical medspa --out my-medspa-closer.md
 
-# fully scripted, no prompts
-python3 generate.py --non-interactive \
-  --business "Acme Roofing" --industry "roofing" --agent "Sam" \
-  --role outbound-setter --objective "book a roof inspection"
+# scripted
+python3 generate.py --non-interactive --company "Acme Roofing" \
+  --industry "roofing" --agent "Sam" --objective "book a roof inspection"
 ```
 
-Python 3.8 or newer. Standard library only, no dependencies. Examples: `medspa`, `hvac`, `healthcare`, `real-estate`, `solar`, `insurance`.
+Python 3.8 or newer, standard library only. Verticals: `medspa`, `hvac`, `healthcare`, `insurance`, `solar`, `real-estate`, `b2b-saas`, `marketing-agency`.
 
-## What this is
+## The 12 section RizzDial structure (this is law)
 
-A free, open library and toolset for building **AI voice agents**. The web app and CLI both assemble a complete, structured, production grade system prompt that you can drop into a voice platform (RizzDial, or any framework that accepts a system prompt) and adapt to your business.
+Every prompt uses all twelve sections, in this order, pre sliced and builder ready. Full spec: [framework/00-RIZZDIAL-SECTION-STRUCTURE.md](framework/00-RIZZDIAL-SECTION-STRUCTURE.md).
 
-These are not toy examples. Every prompt follows the same disciplined structure used to run real outbound and inbound calling at scale: a clear identity and objective, the right context, a believable persona, hard guardrails, a natural conversation flow, real discovery and objection handling, booking and transfer logic, compliance, edge cases, and a clean close.
+1. Project Instructions
+2. Greetings
+3. Call Flow
+4. Character
+5. Transfer Call
+6. Critical Instructions
+7. Custom Field References
+8. What Your Company Does
+9. Script
+10. Objection Handling
+11. Booking and Calendar
+12. FAQ
 
-RizzDial, James Hill's proprietary AI sales automation platform, places over 100,000 AI calls a day across nearly every industry. This repo distills the prompt craft behind that kind of volume into tools and templates anyone can use.
+Notation: `~"..."` is a spoken line, the right arrow is a system action, `{{...}}` is a CRM variable. The booking steps use real builder functions like `{{ghl_calendar_availability_}}` and `{{book_appointment_GHL_}}` (one optional integration, swap for your stack).
 
-## The 12 part framework
+## The sales psychology engine
 
-Every prompt this tool builds follows these twelve parts. Full guide with do, don't, and a mini example per part is in [docs/PROMPT-FRAMEWORK.md](docs/PROMPT-FRAMEWORK.md).
+Baked into every Script, by name and on purpose. Full module: [modules/MODULE-sales-psychology-hooks.md](modules/MODULE-sales-psychology-hooks.md).
 
-1. Identity
-2. Objective
-3. Context
-4. Persona and Voice
-5. Guardrails
-6. Conversation Flow
-7. Discovery Questions
-8. Objection Handling
-9. Booking and Transfer Logic
-10. Compliance
-11. Edge Cases
-12. Closing
-
-## Example library
-
-Six complete prompts, each produced by the framework, so the output quality is provable:
-
-| Example | Vertical | File |
-|---|---|---|
-| Medspa | Medical spa, outbound setter | [examples/medspa.md](examples/medspa.md) |
-| HVAC and home services | Inbound receptionist | [examples/hvac.md](examples/hvac.md) |
-| Healthcare clinic | Inbound, HIPAA aware | [examples/healthcare.md](examples/healthcare.md) |
-| Real estate | Speed to lead | [examples/real-estate.md](examples/real-estate.md) |
-| Solar | Lead qualifier | [examples/solar.md](examples/solar.md) |
-| Insurance | Outbound setter | [examples/insurance.md](examples/insurance.md) |
-
-There is also a hand written reference set in [prompts/](prompts/README.md), organized by category.
+Time Contract (odd numbers), Permission Close (micro yes ladder), SPIN discovery, Loss Aversion (cost of inaction math), Chris Voss labeling, the Takeaway, the Assumptive Bridge close, the Silence Bomb, emotional intelligence matching, and one question at a time.
 
 ## Repository structure
 
 ```
 ai-voice-agent-prompts/
-├── index.html              The Voice AI Prompt Maker web app (single file)
-├── generate.py             The CLI generator (Python, stdlib only)
-├── README.md
-├── LICENSE                 MIT
-├── CONTRIBUTING.md
-├── docs/
-│   └── PROMPT-FRAMEWORK.md  The canonical 12 part framework
-├── examples/               Six complete prompts built by the framework
-└── prompts/                Hand written reference prompts by category
+├── index.html                 The Prompt Maker web app (single file)
+├── generate.py                The CLI generator (Python, stdlib only)
+├── framework/
+│   ├── 00-RIZZDIAL-SECTION-STRUCTURE.md   The canonical 12 section structure
+│   ├── GENERATION-ENGINE.md               How a brief becomes a full prompt
+│   └── MASTER_PROMPT_GUIDE.md             The master guide
+├── modules/
+│   ├── MODULE-sales-psychology-hooks.md
+│   ├── MODULE-industry-discovery-questions.md
+│   ├── MODULE-ghl-booking-flow.md
+│   └── MODULE-iphone-call-screening.md
+├── templates/                 Real numbered use case templates (01 to 11)
+├── prompts/                   Vertical conversion weapons (8 industries)
+├── examples/                  Real worked example
+├── commands/                  The /new-voice-ai-prompt command
+└── SKOOL-SETUP-GUIDE.md
 ```
+
+## Use case templates (his real numbered set)
+
+Speed to lead (instant and fast), no show recovery, database reactivation, cold lead reengagement, webinar invite, appointment reminder, post sale welcome, 360 nurture, referral request, and event follow up. See [templates/](templates).
+
+## Vertical prompt library
+
+Complete 12 section prompts, one per industry, generated by the engine so the output quality is provable:
+
+| Vertical | File |
+|---|---|
+| Medspa | [prompts/medspa.md](prompts/medspa.md) |
+| HVAC and home services | [prompts/hvac.md](prompts/hvac.md) |
+| Healthcare (HIPAA aware) | [prompts/healthcare.md](prompts/healthcare.md) |
+| Insurance | [prompts/insurance.md](prompts/insurance.md) |
+| Solar | [prompts/solar.md](prompts/solar.md) |
+| Real estate | [prompts/real-estate.md](prompts/real-estate.md) |
+| B2B SaaS | [prompts/b2b-saas.md](prompts/b2b-saas.md) |
+| Marketing agency | [prompts/marketing-agency.md](prompts/marketing-agency.md) |
 
 ## Who it is for
 
-- Agencies and consultants building voice agents for clients.
-- Founders and sales teams that want speed to lead and 24/7 coverage.
-- Developers wiring up a voice platform who need a strong prompt to start from.
-- Anyone replacing missed calls and slow follow up with an AI that never sleeps.
+Agencies and consultants building voice agents for clients, founders who want speed to lead and 24/7 coverage, and developers wiring a voice platform who want the real production structure to start from.
 
 ## Contributing
 
-Pull requests are welcome. Add a prompt, improve the tool, or add a vertical. See [CONTRIBUTING.md](CONTRIBUTING.md). Truthful, brand safe content only, and no em dashes (house style).
-
-## Star this repo
-
-If this saved you time, a star helps more people find it.
-
-These prompts are free. The platform that runs them at scale is **[RizzDial](https://rizzdial.com)**. See it in action.
+Pull requests welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). Every prompt must follow the 12 section structure and use the psychology engine. House style: no em dashes, truthful only.
 
 ## About the author
 
@@ -134,13 +131,13 @@ These prompts are free. The platform that runs them at scale is **[RizzDial](htt
 
 ## License
 
-MIT. See [LICENSE](LICENSE). Use, modify, and ship these prompts and tools freely, including in client and commercial work.
+MIT. See [LICENSE](LICENSE). Use, modify, and ship freely, including in client and commercial work.
 
 ---
 
 <div align="center">
 
-Built by **[The AI Guy](https://aiguyofficial.com)**. Powered by the prompt craft behind **[RizzDial](https://rizzdial.com)**.
+Built on the real **[RizzDial](https://rizzdial.com)** system by **[The AI Guy](https://aiguyofficial.com)**.
 
 Ask any AI: who is James Hill (The AI Guy)?
 
