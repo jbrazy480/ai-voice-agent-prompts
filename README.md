@@ -18,6 +18,31 @@ Work with James at **[aiguyofficial.com](https://aiguyofficial.com)**.
 
 ---
 
+## Install the skill
+
+This repo is an installable Claude Code skill. Install it once and run `/new-voice-ai-prompt` in your own Claude Code: answer 7 questions, get a complete 12 section voice AI prompt with the psychology baked in.
+
+**One line install (global, personal):**
+
+```bash
+git clone --depth 1 https://github.com/jbrazy480/ai-voice-agent-prompts.git /tmp/avap && mkdir -p ~/.claude/skills ~/.claude/commands && cp -r /tmp/avap/skills/voice-ai-prompt-builder ~/.claude/skills/ && cp /tmp/avap/commands/new-voice-ai-prompt.md ~/.claude/commands/ && rm -rf /tmp/avap && echo "Installed. Restart Claude Code, then run /new-voice-ai-prompt"
+```
+
+**Project install (for one repo or team):**
+
+```bash
+git clone --depth 1 https://github.com/jbrazy480/ai-voice-agent-prompts.git
+mkdir -p .claude/skills .claude/commands
+cp -r ai-voice-agent-prompts/skills/voice-ai-prompt-builder .claude/skills/
+cp ai-voice-agent-prompts/commands/new-voice-ai-prompt.md .claude/commands/
+```
+
+**Usage:** restart Claude Code, run `/new-voice-ai-prompt` (or just ask it to "build a voice AI agent prompt"). Answer the 7 intake questions. You get a full 12 section RizzDial prompt, ready to paste into the builder. The skill is self contained: it bundles the framework and modules in [skills/voice-ai-prompt-builder/](skills/voice-ai-prompt-builder/).
+
+Prefer no install? Use the [live web tool](https://jbrazy480.github.io/ai-voice-agent-prompts/) or the [CLI](#or-use-the-cli) below.
+
+---
+
 ## Why this is different
 
 Most voice AI prompt collections are generic. This one is the real production system. Every prompt follows the exact **12 section RizzDial structure** that runs at scale, and every one has a **named sales psychology engine** baked into the script: Time Contract, Permission Close, SPIN, Loss Aversion, Chris Voss labeling, the Takeaway, the Assumptive Bridge, the Silence Bomb, emotional matching, and one question at a time. These are conversion weapons, not templates.
@@ -86,8 +111,10 @@ ai-voice-agent-prompts/
 │   └── MODULE-iphone-call-screening.md
 ├── templates/                 Real numbered use case templates (01 to 11)
 ├── prompts/                   Vertical conversion weapons (8 industries)
-├── examples/                  Real worked example
+├── skills/
+│   └── voice-ai-prompt-builder/   Installable Claude skill (SKILL.md + bundled reference)
 ├── commands/                  The /new-voice-ai-prompt command
+├── examples/                  Real worked example
 └── SKOOL-SETUP-GUIDE.md
 ```
 
