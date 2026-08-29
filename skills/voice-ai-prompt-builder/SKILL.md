@@ -39,6 +39,7 @@ Before generating, read the bundled references in this skill folder:
 - `reference/MODULE-industry-discovery-questions.md` (per vertical discovery questions and pricing deflections)
 - `reference/MODULE-ghl-booking-flow.md` (the booking steps and function calls)
 - `reference/MODULE-iphone-call-screening.md` (the iOS screening guardrail, required for outbound)
+- `reference/MODULE-amd-and-connection.md` (prompt-side voicemail hangup, short live path, transfer when hot, required for outbound)
 
 These are copied into the skill so it is self contained. If the user is inside the full repo, the same files also live at `framework/` and `modules/`.
 
@@ -66,6 +67,7 @@ Authoring rules (from the structure doc):
 - Use the right arrow for actions (function calls, transitions, captures).
 - Bake the psychology hooks in by name and on purpose, at the right moments: Time Contract opener (odd numbers), Permission Close micro yes ladder, SPIN discovery, Chris Voss labeling, Loss Aversion cost of inaction math, the Takeaway, the Assumptive Bridge close, the Silence Bomb, emotional matching.
 - Put the iPhone call screening guardrail in Critical Instructions for every outbound agent.
+- Put the AMD / voicemail hangup guardrail in Critical Instructions for every outbound agent. Hang up on mailbox and IVR. Do not talk into voicemail. Transfer when hot.
 - Pull discovery questions from the industry module for the chosen vertical.
 - In the Booking flow, use the real function names: `ghl_calendar_availability_`, `book_appointment_GHL_`, `create_or_update_contact_GHL_`, `tag_contact_GHL_`, `disqualify_contact_GHL_`. These are the real builder integration functions. Booking works with GoHighLevel and other calendars, so the user can swap them for their own stack.
 - Every captured field appears in Custom Field References with its mapping.

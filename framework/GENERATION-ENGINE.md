@@ -63,6 +63,9 @@ Every prompt MUST include:
 The full iPhone screening module goes into Critical Instructions / Guardrails for every outbound agent. No exceptions.
 **Inbound agents do NOT need iPhone screening** - the prospect called us. Skip the module entirely for inbound use cases. Also skip the latency disclaimer (Rule 12) for inbound agents.
 
+### Rule 4.25: Prompt-side AMD hangup is required on every outbound agent
+Carrier answering-machine detection is not reliable. If the first audio is a voicemail, answering machine, or IVR greeting, hang up immediately. Do not talk into the mailbox. Do not leave a message. Do not count machine talk as success. Real success is a booked appointment or a live transfer. Full phrases and rules: `MODULE-amd-and-connection.md`. iPhone screening (name and reason request, then silence) still follows `MODULE-iphone-call-screening.md`. If screening turns into a mailbox, hang up. One question at a time. Never interrogate before a micro-yes. If they are hot and a closer is available, transfer. Local caller ID and no CID blasting are ops notes, not spoken lines. Inbound receptionists skip the hangup block.
+
 ### Rule 4.5: Industry-specific discovery questions are pulled from the question bank
 When generating qualification and discovery questions, check `MODULE-industry-discovery-questions.md` for the client's industry vertical. If a match exists (B2B SaaS, Insurance, HVAC/Home Services, Marketing Agency, Medical/Wellness, Real Estate), pull the Situation, Problem, Consequence, and Commitment questions from that vertical and adapt them to the agent's voice. Also pull the industry-specific pricing deflection for the FAQ section. For verticals NOT in the bank, use the Universal Consultative Structure at the bottom of the module as a skeleton.
 
@@ -660,6 +663,7 @@ Before delivering any generated prompt, verify:
 - [ ] Assumptive Bridge for the close
 - [ ] Silence Bomb at the end
 - [ ] iPhone Call Screening in Guardrails (outbound agents ONLY - skip for inbound)
+- [ ] AMD / voicemail hangup in Guardrails (outbound agents ONLY - hang up on mailbox and IVR, do not LLM voicemail)
 - [ ] Rules #0 through #4 in Guardrails
 - [ ] Voice style matches user preference (disfluencies in spoken lines OR clean/sharp with pause markers only)
 - [ ] If disfluencies requested: verified they appear in Script, Objection Handling, FAQ, and Booking Flow spoken lines - not just Character section

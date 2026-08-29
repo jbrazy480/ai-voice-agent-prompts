@@ -108,8 +108,9 @@ ai-voice-agent-prompts/
 │   ├── MODULE-sales-psychology-hooks.md
 │   ├── MODULE-industry-discovery-questions.md
 │   ├── MODULE-ghl-booking-flow.md
-│   └── MODULE-iphone-call-screening.md
-├── templates/                 Real numbered use case templates (01 to 11)
+│   ├── MODULE-iphone-call-screening.md
+│   └── MODULE-amd-and-connection.md
+├── templates/                 Real numbered use case templates (01 to 14)
 ├── prompts/                   Vertical conversion weapons (8 industries)
 ├── skills/
 │   └── voice-ai-prompt-builder/   Installable Claude skill (SKILL.md + bundled reference)
@@ -120,7 +121,24 @@ ai-voice-agent-prompts/
 
 ## Use case templates (his real numbered set)
 
-Speed to lead (instant and fast), no show recovery, database reactivation, cold lead reengagement, webinar invite, appointment reminder, post sale welcome, 360 nurture, referral request, and event follow up. See [templates/](templates).
+Speed to lead (instant and fast), no show recovery, database reactivation, cold lead reengagement, webinar invite, appointment reminder, post sale welcome, 360 nurture, referral request, and event follow up. Plus the live-call set: inbound receptionist booking, short outbound closer, and transfer when hot. See [templates/](templates).
+
+| # | Template |
+|---|---|
+| 01 | [Speed to lead, live transfer](templates/01-speed-to-lead-live-transfer.md) |
+| 02 | [Speed to lead, booking](templates/02-speed-to-lead-booking.md) |
+| 03 | [Speed to lead, booking + transfer](templates/03-speed-to-lead-both.md) |
+| 04 | [No-show recovery](templates/04-no-show-recovery.md) |
+| 05 | [360 nurture](templates/05-360-nurture.md) |
+| 06 | [Annual re-engagement](templates/06-annual-reengagement.md) |
+| 07 | [2 hour appointment reminder](templates/07-appointment-reminder-2hr.md) |
+| 08 | [Post-sale welcome](templates/08-post-sale-welcome.md) |
+| 09 | [Appointment no-show v2](templates/09-appointment-no-show-v2.md) |
+| 10 | [Database reactivation](templates/10-database-reactivation.md) |
+| 11 | [Webinar invite](templates/11-webinar-invite.md) |
+| 12 | [Inbound receptionist booking](templates/12-inbound-receptionist-booking.md) |
+| 13 | [Short outbound closer](templates/13-short-outbound-closer.md) |
+| 14 | [Transfer when hot](templates/14-transfer-when-hot.md) |
 
 ## Vertical prompt library
 

@@ -137,9 +137,6 @@ VERTICALS = {
         "transfer": "a solar advisor",
         "discovery": [
             "Do you own the home, or rent?",
-            "Rough monthly electric bill, ballpark?",
-            "Is the roof newer, or has it been a while?",
-            "What got you thinking about solar now?",
         ],
         "loss_math": "Every month you wait is another full power bill you do not get back, and incentives change without much warning.",
         "faq": [
@@ -254,8 +251,13 @@ def assemble(s):
     A = ARROW
 
     crit = [
+        "HANG UP immediately if the first audio is voicemail, an answering machine, or an IVR menu. Do not talk into the mailbox. Do not leave a message.",
+        "Hang-up phrases: your call has been forwarded, leave a message after the beep, the person you are trying to reach, you've reached the voicemail, press 1.",
+        "Talking into voicemail is not a successful call. Real success is a booked appointment or a live transfer.",
+        "iPhone screening (name and reason only, then silence): state your name, wait 30 seconds. If it becomes a mailbox, hang up.",
         "NEVER invent prices or make promises outside the script. If you do not know, say a specialist will follow up.",
         "ONE question at a time. Ask, then stop and wait for the answer. Never stack questions.",
+        "Never interrogate before a micro-yes. If they are hot and a closer is available, transfer. Do not over-qualify.",
         "MATCH the caller energy (Emotional Intelligence). If they are rushed, get to the point. If chatty, warm up first.",
         "ALWAYS confirm the appointment time twice before ending.",
         "Speak numbers and times the way a person says them, for example two thirty in the afternoon.",
