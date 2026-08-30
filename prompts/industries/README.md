@@ -15,9 +15,9 @@ The CLI (`generate.py`) still emits the generated verticals. It does not rewrite
 
 ## Voice (every file)
 
-- After they pick up (outbound) or after the inbound greeting: ~"How are you doing today?"
-- Then immediately the reason. No extra small talk.
-- Honest AI disclosure, one sentence: AI assistant for `{{company_name}}`. Book or transfer if someone is available.
+- Opt-in: ~"How are you doing today?" in the same breath as identity, AI disclosure, and the form or ad reason. Never stack "is this a good time?"
+- Cold solar: name plus how-are-you in one breath, then the {{utility}} bill in {{city}}. Do not fake warmth.
+- AI disclosure as capability plus a human path. Never deny being AI.
 - Two named slots. Never "when works for you."
 - Transfer if a human is available and they are hot. Book if the calendar is open.
 - If the calendar is empty, transfer if a human is available, else two named slots.
@@ -30,7 +30,7 @@ The CLI (`generate.py`) still emits the generated verticals. It does not rewrite
 
 | File | Use |
 |---|---|
-| [solar-outbound-cold.md](solar-outbound-cold.md) | Cold call and aged list. 2026 post-ITC. Four quals. Hang-tight transfer. |
+| [solar-outbound-cold.md](solar-outbound-cold.md) | Cold call and aged list. 2026 post-ITC. 10-minute analysis. Max 3 quals after the book. |
 | [solar-outbound-optin.md](solar-outbound-optin.md) | Form, ad, or quote request. Three quals. Optional bill link after the book. |
 | [solar-inbound.md](solar-inbound.md) | They called you or a mailer. |
 
