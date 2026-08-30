@@ -15,6 +15,7 @@ You MUST read these files before generating anything:
 - `02_RizzDial/templates/GENERATION-ENGINE.md` - the full generation rules and section-by-section guide
 - `02_RizzDial/templates/MODULE-sales-psychology-hooks.md` - the hooks and frameworks library
 - `02_RizzDial/templates/MODULE-iphone-call-screening.md` - iPhone screening handler (required for all outbound)
+- `modules/MODULE-amd-and-connection.md` - prompt-side voicemail hangup, short live path, transfer when hot (required for all outbound)
 - `02_RizzDial/templates/00-RIZZDIAL-SECTION-STRUCTURE.md` - the 12-section structure and authoring rules
 - `02_RizzDial/MASTER_PROMPT_GUIDE.md` - the top-priority rules and voice style guide
 
@@ -94,6 +95,7 @@ Using the GENERATION-ENGINE.md rules, the sales psychology hooks library, the iP
 - Use the Assumptive Bridge for the close
 - End with the Silence Bomb
 - Include iPhone Call Screening in Guardrails - **ONLY for outbound agents.** Inbound agents do NOT need iPhone screening (the prospect called us).
+- Include AMD / voicemail hangup in Guardrails for outbound agents. Hang up on mailbox and IVR. Do not talk into voicemail. Transfer when hot. See `MODULE-amd-and-connection.md`.
 - Include ALL top-priority rules (#0 through #4) in Guardrails
 - Match voice style to user's preference from Question 8 (ultra-natural with disfluencies, clean/sharp, or custom)
 - If disfluencies are requested: weave "um," "uh," "like," "yeah," "gotcha," "I mean" directly into EVERY ~"..." spoken line across Script, Objection Handling, FAQ, and Booking Flow - not just described in Character. ~1 disfluency every 3-4 sentences.

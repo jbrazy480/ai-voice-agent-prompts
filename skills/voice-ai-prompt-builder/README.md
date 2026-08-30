@@ -9,12 +9,12 @@ This is the real method behind **[RizzDial](https://rizzdial.com)**, the proprie
 Run `/new-voice-ai-prompt` (or just ask Claude to "build a voice AI agent prompt") and the skill:
 
 1. Asks 7 quick intake questions (industry, goal, inbound or outbound, offer, agent name, booking target, qualification gates).
-2. Reads its bundled reference files (the 12 section structure, the generation engine, and the four modules).
+2. Reads its bundled reference files (the 12 section structure, the generation engine, and the five modules).
 3. Outputs a complete prompt with all 12 sections, pre sliced for the RizzDial builder, with the psychology hooks injected at the right moments.
 
 ## What it outputs
 
-A 12 section prompt: Project Instructions, Greetings, Call Flow, Character, Transfer Call, Critical Instructions, Custom Field References, What Your Company Does, Script, Objection Handling, Booking flow, FAQ. It uses `~"..."` for spoken lines, the right arrow for actions, the iPhone call screening guardrail on outbound agents, the per vertical discovery questions, and the real booking function names (works with GoHighLevel and other calendars).
+A 12 section prompt: Project Instructions, Greetings, Call Flow, Character, Transfer Call, Critical Instructions, Custom Field References, What Your Company Does, Script, Objection Handling, Booking flow, FAQ. It uses `~"..."` for spoken lines, the right arrow for actions, the iPhone call screening guardrail and AMD voicemail hangup on outbound agents, the per vertical discovery questions, and the real booking function names (works with GoHighLevel and other calendars).
 
 ## Files
 
@@ -28,7 +28,8 @@ voice-ai-prompt-builder/
     ├── MODULE-sales-psychology-hooks.md
     ├── MODULE-industry-discovery-questions.md
     ├── MODULE-ghl-booking-flow.md
-    └── MODULE-iphone-call-screening.md
+    ├── MODULE-iphone-call-screening.md
+    └── MODULE-amd-and-connection.md
 ```
 
 ## Install

@@ -16,6 +16,12 @@ Reference library for building high-converting voice AI agents. Use these as the
 8. [08 - Post-Sale Welcome Call](08-post-sale-welcome.md)
 9. [09 - Appointment No-Show (v2)](09-appointment-no-show-v2.md)
 10. [10 - Database Reactivation](10-database-reactivation.md)
+11. [11 - Webinar / Event Invite](11-webinar-invite.md)
+12. [12 - Inbound Receptionist Booking](12-inbound-receptionist-booking.md)
+13. [13 - Short Outbound Closer](13-short-outbound-closer.md)
+14. [14 - Transfer When Hot](14-transfer-when-hot.md)
+
+12 through 14 are the live-call set. Inbound books in under 2 minutes. Outbound is name, one why, one qualifier, two slots. Transfer-when-hot treats a yes as a conversion. All outbound templates hang up on voicemail (see `modules/MODULE-amd-and-connection.md`).
 
 ## Editing Rules (from source doc)
 - **GREEN sections** = variables to customize per business (BUSINESS NAME, AGENT NAME, PAIN POINT, PRODUCT/SERVICE, TIME ZONE, elevator pitch, qualifying questions, etc.)
